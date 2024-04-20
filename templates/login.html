@@ -1,0 +1,249 @@
+{% load static %}
+{% load socialaccount %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>StreamIT | Responsive Bootstrap 5 Template</title>
+    <!-- Google Font Api KEY-->
+    <meta name="google_font_api" content="AIzaSyBG58yNdAjc20_8jAvLNSVi9E4Xhwjau_k">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="./assets/images/favicon.ico" />
+
+    <!-- Library / Plugin Css Build -->
+    <link rel="stylesheet" href="{% static 'css/libs.min.css' %}" />
+
+    <!-- font-awesome css -->
+    <link rel="stylesheet" href="{% static 'css/all.min.css' %}" />
+
+    <!-- Iconly css -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+
+    <!-- Animate css -->
+    <link rel="stylesheet" href="{% static 'css/animate.min.css' %}" />
+
+    <!-- SwiperSlider css -->
+    <link rel="stylesheet" href="{% static 'css/swiper.min.css' %}">
+
+
+
+
+
+    <!-- Streamit Design System Css -->
+    <link rel="stylesheet" href="{% static 'css/streamit.min.css' %}" />
+
+    <!-- Custom Css -->
+    <link rel="stylesheet" href="{% static 'css/custom.min.css' %}" />
+
+    <!-- Rtl Css -->
+
+    <!-- Google Font -->
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <style>
+        .container2 {
+            width: 550px;
+            perspective: 1000px;
+            position: relative;
+    
+        }
+    
+        .card {
+            width: 100%;
+            height: auto;
+            position: absolute;
+            transition: transform 1.0s ease-in;
+            transform-style: preserve-3d;
+        }
+    
+        .card.flip {
+            transform: rotateY(180deg);
+        }
+    
+        .front,
+        .back {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            backface-visibility: hidden;
+        }
+    
+        .front {
+            background-color: black;
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: min-content;
+            padding-top: 30px;
+            padding-bottom: 30px;
+            border: 1px solid green;
+        }
+    
+        .back {
+            background-color: black;
+            transform: rotateY(180deg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: fit-content;
+            padding-top: 30px;
+            padding-bottom: 30px;
+            border: 1px solid green;
+        }
+    
+        .form-group {
+            margin-bottom: 15px;
+            width: 90%;
+        }
+    
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #fff;
+        }
+    
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+    
+        .form-group button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    
+        p {
+            color: #fff;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+    
+        form {
+            padding-left: 55px;
+            width: 100%;
+        }
+    
+        a {
+            color: #007bff;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    
+    <div class="section-padding  " style="display: flex;height: 90vh;">
+        <div class="container container2">
+            <div class="card" id="card">
+    
+    
+                <div class="front">
+    
+                    <div class="pricing-plan-header">
+                        <h4 class="plan-name text-capitalize text-body mb-0">Login Here</h4>
+                    </div>
+    
+                    <form id="registerForm" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input class="input" type="text" id="username" name="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input class="input" type="password" id="password" name="pass" required>
+                        </div>
+
+                        <br><br><br> <a href="{% provider_login_url 'google' %}?next=/">Login Using Google</a><br><br><br>
+
+
+                        <div class="form-group iq-button">
+                            <button name="userlogin" class="btn" style="margin-top: 10px;" type="submit">Login</button>
+                        </div>
+                        <p>Don't have an account? <a href="#" id="flipToRegister">Register</a></p>
+                    </form>
+                </div>
+                <div class="back">
+                    <div class="pricing-plan-header">
+                        <h4 class="plan-name text-capitalize text-body mb-0">Register Here</h4>
+                    </div>
+                    <form id="registerForm" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="newUsername">Full Name</label>
+                            <input type="text" id="newUsername" name="fullname" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newUsername">Username</label>
+                            <input type="text" id="newUsername" name="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newPassword">Email</label>
+                            <input type="email" id="newPassword" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newPassword">Password</label>
+                            <input type="password" id="newPassword" name="pass" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newPassword">Confirm Password</label>
+                            <input type="password" id="newPassword" name="cpass" required>
+                        </div>
+                        
+    
+                        <div class="form-group iq-button">
+                            <button name="register" type="submit" class="btn" style="margin-top: 10px;">Register</button>
+                        </div>
+                        <p>Already have an account? <a href="#" id="flipToLogin">Login</a></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    
+    </div>
+    <script src="{% static 'js/libs.min.js' %}"></script>
+    <!-- Plugin Scripts -->
+
+
+    <!-- SwiperSlider Script -->
+    <script src="{% static 'js/swiper.min.js' %}"></script>
+
+
+    <!-- Select2 Script -->
+    <script src="{% static 'js/select2.js' %}" defer></script>
+
+
+    <!-- Lodash Utility -->
+    <script src="{% static 'js/lodash.min.js' %}"></script>
+    <!-- External Library Bundle Script -->
+    <script src="{% static 'js/external.min.js' %}"></script>
+    <!-- countdown Script -->
+    <!-- utility Script -->
+    <script src="{% static 'js/utility.js' %}"></script>
+    <!-- Setting Script -->
+    <script src="{% static 'js/setting.js' %}"></script>
+    <script src="{% static 'js/setting-init.js' %}" ></script>
+    <!-- Streamit Script -->
+    <script src="{% static 'js/streamit.js' %}" ></script>
+    <script src="{% static 'js/swiper.js' %}" ></script>
+    <script src="{% static 'js/flip.js' %}" ></script>
+</body>
+</html>
