@@ -1,11 +1,28 @@
-from django.shortcuts import redirect, render
+from itertools import chain
+from django.shortcuts import get_object_or_404, redirect, render
 
 # Create your views here.
 from django.contrib.auth import authenticate,login,logout
 from .models import *
 # Create your views here.
 def index(request):
+
     movie=Movies.objects.all()
+    popular_movie=Movies.objects.order_by('-imdb_rating')[:10]
+    popular_tvshow=TVShow.objects.order_by('-imdb_rating')[:10]
+    latest_movies=Movies.objects.order_by('-id')[:5]
+    latest_tvshow=TVShow.objects.order_by('-id')[:5]
+    trending_movies=Movies.objects.order_by('trendingORpriority')[:10] 
+    trending_tvshow=TVShow.objects.order_by('trendingORpriority')[:10] 
+    trending_movie=Movies.objects.order_by('trendingORpriority')[:1] 
+
+    popular_content = sorted(
+        chain(popular_movie, popular_tvshow),
+        key=lambda instance: instance.id,
+        reverse=True
+    )[:10]
+
+
     name=""
     if "userID" in request.session:
         u_id=request.session["userID"]
@@ -14,46 +31,112 @@ def index(request):
         
     context={
         'movie':movie,
-        'name':name
+        'name':name,
+        'popular_content':popular_content,
+        'latest_movies':latest_movies,
+        'trending_movies':trending_movies,
+        'latest_tvshow':latest_tvshow,
+        'trending_movie':trending_movie,
+        'trending_tvshow':trending_tvshow,
     }
     
     return render(request,'index.html',context)
-def moviesHome(request):
 
+def moviesHome(request):
+    
     movie=Movies.objects.all()
+    latest_movie=Movies.objects.order_by('-id')[:4]
+    popular_movie=Movies.objects.order_by('-imdb_rating')[:10]
+    
     context={
-        'movie':movie
+        'movie':movie,
+        'latest_movie':latest_movie,
+        'popular_movie':popular_movie
+        
     }
 
     return render(request,'moviesHome.html',context)
+
 def TVshows(request):
+    Tvshow=TVShow.objects.all()
+
+    context={
+        'Tvshow':Tvshow,
+        
+        
+    }
+    return render(request,'TVshows.html',context)
+
+def TVshow_details(request,id):
+    season = request.GET.get('seasons')
+
+    TVshow=TVShow.objects.get(id=id)
+    seasons=Season.objects.filter(show=id)
+    if request.method == 'POST':
+        season_id = request.POST["season"]
+        season=Episode.objects.filter(season=season_id)
+        context={
+        'TVshow':TVshow,
+        'showcount':len(seasons),
+        'seasons':seasons,
+        'season':season,
+        'season_id':season_id
+        
+        }
+        return render(request,'TVshow_details.html',context)
 
 
-    return render(request,'TVshows.html')
+    context={
+        'TVshow':TVshow,
+        'showcount':len(seasons),
+        'seasons':seasons,
+        
+    }
+    
+    return render(request,'TVshow_details.html',context)
+
 def pricingpage(request):
 
 
     return render(request,'pricingpage.html')
+
 def profile(request):
+    u_id=request.session["userID"]
+    user=user_reg.objects.get(user__id=u_id)
+    watchlist=Watchlist.objects.filter(user_id__id=user.id)
+    favourite=Favourite.objects.filter(user_id__id=user.id)
+    
+        
+    
 
+    context={
+        'watchlist':watchlist,
+        'favourite':favourite,
+        'user':user,
+    }
 
-    return render(request,'profile.html')
+    return render(request,'profile.html',context)
+
 def tags(request):
 
 
     return render(request,'tags.html')
+
 def aboutUs(request):
 
 
     return render(request,'aboutUs.html')
+
 def contactUs(request):
 
 
     return render(request,'contactUs.html')
+
 def comingsoon(request):
 
 
     return render(request,'comingsoon.html')
+
 def loginUser(request):
     if request.POST and 'register' in request.POST:
         fullname=request.POST["fullname"]
@@ -92,6 +175,7 @@ def sign_out(request):
     logout(request)
 
     return redirect('index')
+
 def All_movies(request):
     movie=Movies.objects.all()
     context={
@@ -100,9 +184,83 @@ def All_movies(request):
 
     return render(request,'All_movies.html',context)
 
-
-def single_movie(request):
+def single_movie(request,id):
     
+    movie=Movies.objects.get(id=id)
+    genre=movie.movie_genres
+    related_movie=Movies.objects.filter(movie_genres=genre)
 
-    return render(request,'single_movie.html')
+    if 'fav' in request.POST:
+        u_id=request.session["userID"]
+        user=user_reg.objects.get(user__id=u_id)
+        movie = Movies.objects.get(id=id)
+
+
+        obj=Favourite.objects.create(movie_id=movie,
+                                        user_id=user
+                                        )
+        obj.save()
+        
+
+    if 'watchlist' in request.POST:
+        u_id=request.session["userID"]
+        user=user_reg.objects.get(user__id=u_id)
+        movie = Movies.objects.get(id=id)
+
+
+        obj=Watchlist.objects.create(movie_id=movie,
+                                        user_id=user
+                                        )
+        obj.save()
+        
+
+    context={
+        'movie':movie,
+        'related_movie':related_movie
+    }
+
+    return render(request,'single_movie.html',context)
+
+def addToWatchlist(request,id):
+
+    u_id=request.session["userID"]
+    user=user_reg.objects.get(user__id=u_id)
+    movie = Movies.objects.get(id=id)
+
+
+    obj=Watchlist.objects.create(movie_id=movie,
+                                    user_id=user
+                                    )
+    obj.save()
+
+    return redirect('moviesHome')
+
+def removeWatchlist(request,id):
+
+    remove=Watchlist.objects.get(id=id)
+        
+    remove.delete() 
+    return redirect('profile')
+
+def addToFavourite(request,id):
+
+    u_id=request.session["userID"]
+    user=user_reg.objects.get(user__id=u_id)
+    movie = Movies.objects.get(id=id)
+
+
+    obj=Favourite.objects.create(movie_id=movie,
+                                    user_id=user
+                                    )
+    obj.save()
+
+    return redirect('moviesHome')
+
+def removeFavourite(request,id):
+    remove=Favourite.objects.get(id=id)
+        
+    remove.delete() 
+    return redirect('profile')
+
+
 

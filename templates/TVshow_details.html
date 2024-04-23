@@ -1,0 +1,353 @@
+{% extends "blank_layout.html" %}
+{% load static %}
+{% block content %}
+
+<!-- Banner Start -->
+<div class="tv-show-detail">
+    <div class="container-fluid">
+        <div class="overlay-wrapper iq-main-slider "
+            style="background: url('/static/media/{{ TVshow.TVShow_thumbnail }}'); background-repeat: no-repeat; background-position: center; background-size: cover; opacity: 0.9; ">
+            <div class="banner-caption">
+                <div class="trending-info p-0">
+                    <h2 class=" text-uppercase mt-2">{{TVshow.title}}</h2>
+                    <div class="slider-ratting d-flex align-items-center gap-3" data-animation-in="fadeInLeft">
+                        <ul
+                            class="ratting-start p-0 m-0 list-inline text-warning d-flex align-items-center justify-content-left">
+                            <li>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                            </li>
+                            <li>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                            </li>
+                            <li>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                            </li>
+                            <li>
+                                <i class="fa fa-star-half" aria-hidden="true"></i>
+                            </li>
+                        </ul>
+                        <span class="text-white">{{TVshow.imdb_rating}} <img src="{% static 'images/imdb-logo.svg' %}"
+                                alt="imdb logo" class="img-fluid"></span>
+                    </div>
+                    <ul class="p-0 mt-2 list-inline d-flex flex-wrap movie-tag">
+                        <li class="trending-list">
+                            <a class="text-primary text-uppercase font-size-18"
+                                href="./view-all-movie.html">{{TVshow.TVShow_genre.genre}}</a>
+                        </li>
+
+
+                    </ul>
+                    <div class="d-flex flex-wrap align-items-center gap-3 font-size-20 mb-3 fw-500 text-white">
+
+                        <span>Seasons : {{showcount}} </span>
+                        <span class="font-size-6"><i class="fa-solid fa-circle"></i></span>
+                        <span>{{TVshow.TVShow_mon_yr}}</span>
+                    </div>
+                    <p class="line-count-2 my-3">
+                        {{TVshow.show_desc}}
+                    </p>
+                </div>
+                <div class="position-relative my-4">
+                    <a href="/static/media/{{TVshow.TVshow_trailer}}" class="d-flex align-items-center gap-3">
+                        <div class="play-button">
+                            <i class="fa-solid fa-play"></i>
+                        </div>
+                        <h4 class="text-white fw-bold m-0">Watch Trailer</h4>
+                    </a>
+                </div>
+                <div class="d-flex align-items-center flex-wrap gap-4 mb-4">
+                    <ul class="list-inline p-0 m-0 share-icons music-play-lists mb-n2 mx-n2">
+
+                        <li><span><i class="fa-solid fa-heart"></i></span></li>
+                        <li><span><i class="fa-solid fa-plus"></i></span></li>
+                    </ul>
+
+                </div>
+                <ul class="iq-blogtag list-unstyled d-flex flex-wrap align-items-center gap-3 p-0">
+                    <li class="iq-tag-title text-primary mb-0">
+                        <i class="fa fa-tags" aria-hidden="true"></i> Tags:
+                    </li>
+                    {% for a in TVshow.Tags.all %}
+                    <li><a class="title" href="./view-all-movie.html">{{a.tag}}&nbsp;&nbsp;&nbsp;</a>
+                        {% if not forloop.last %}<span class="font-size-6"><i class="fa-solid fa-circle"></i></span>{% endif %}
+                    </li>
+                    {% endfor %}
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Banner End -->
+
+<!-- Episode Start -->
+<div class="show-episode section-padding">
+    <div class="container-fluid">
+        <div class="show-movie-section">
+            <div class="iq-custom-select d-inline-block">
+                <form id="seasonForm" method="post">
+                    {% csrf_token %}
+                    <select id="seasonSelect" name="season" style="display:none;">
+                      {% for a in seasons %}
+                        <option value="{{ a.id }}">Season {{ a.number }}</option>
+                      {% endfor %}
+                    </select>
+                    <div id="buttonsContainer">
+                      {% for a in seasons %}
+                        <button type="button" class="seasonButton btn" style="border: 1px solid green;" value="{{ a.id }}">Season {{ a.number }}</button>
+                      {% endfor %}
+                    </div>
+                    <button type="submit" id="submitBtn" style="display:none;">Go</button>
+                </form>
+            </div>
+            <div class="show-custom-tab">
+                <ul class="iq-custom-tab tab-bg-fill nav nav-pills text-center list-inline my-4" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active show m-0" data-bs-toggle="pill" href="#episodes" role="tab"
+                            aria-selected="true">Episodes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link  m-0" data-bs-toggle="pill" href="#description" role="tab"
+                            aria-selected="false">Description</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link  m-0" data-bs-toggle="pill" href="#rate-review" role="tab"
+                            aria-selected="false">Rate & Review</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="episodes" class="tab-pane animated fadeInUp active show">
+                        <div class="row list-inline p-0 mb-0">
+                            {% for episode in season %}
+                            <div class="col-lg-3 col-sm-12 col-md-6">
+                                <div class="episode-block">
+                                    <div class="block-image position-relative">
+                                        <a href="">
+                                            <img src="/static/media/{{episode.TVShow_epi_image}}"
+                                                class="img-fluid img-zoom" alt="showImg-" loading="lazy">
+                                        </a>
+                                        <div class="episode-number">S0{{episode.season.number}}E{{episode.number}}</div>
+                                        <div class="episode-play">
+                                            <a href="./episode.html" tabindex="0"><i class="fa-solid fa-play"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="epi-desc p-3">
+                                        <div class="d-flex align-items-center justify-content-between mb-3">
+                                            <span class="border-gredient-left text-white rel-date">{{ episode.TVshow_epi_mon_yr }}</span>
+                                            <span class="text-primary run-time">{{episode.TVshow_epi_duration}}</span>
+                                        </div>
+                                        <a href="./episode.html">
+                                            <h5 class="epi-name text-white mb-0"> {{episode.episode_title}} </h5>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% empty %}
+
+                            <p class="ps-5">Select Any Season To See Episodes</p>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                    <div id="description" class="tab-pane animated fadeInUp">
+                        <p class="my-3">
+                            {{TVshow.show_desc}}
+                        </p>
+                    </div>
+                    <div id="rate-review" class="tab-pane animated fadeInUp">
+                        <div class="streamit-reviews">
+                            <div id="comments" class="comments-area validate-form">
+                                <p class="masvideos-noreviews mt-3">
+                                    There are no reviews yet.
+                                </p>
+                            </div>
+                            <div class="review_form">
+                                <div class="comment-respond">
+                                    <h3 class="fw-500 my-2">
+                                        Be the first to review “Zombie Island”
+                                    </h3>
+                                    <form class="comment-form">
+                                        <p class="comment-notes">
+                                            <span>
+                                                Your email address will not be published.
+                                            </span>
+                                            <span> Required fields are marked
+                                                <span class="required"> * </span>
+                                            </span>
+                                        </p>
+                                        <div class="d-flex align-items-center mb-4">
+                                            <label>
+                                                Your rating
+                                            </label>
+                                            <div class="star ms-4 text-primary">
+                                                <span>
+                                                    <i class="fa-regular fa-star"></i>
+                                                </span>
+                                                <span>
+                                                    <i class="fa-regular fa-star"></i>
+                                                </span>
+                                                <span>
+                                                    <i class="fa-regular fa-star"></i>
+                                                </span>
+                                                <span>
+                                                    <i class="fa-regular fa-star"></i>
+                                                </span>
+                                                <span>
+                                                    <i class="fa-regular fa-star"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="mb-2">
+                                                        Your review
+                                                        <span class="required">
+                                                            *
+                                                        </span>
+                                                    </label>
+                                                    <textarea class="form-control" name="comment" cols="5" rows="8"
+                                                        required=""></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="mb-2">
+                                                        Name
+                                                        <span class="required">
+                                                            *
+                                                        </span>
+                                                    </label>
+                                                    <input class="form-control" name="author" type="text" value=""
+                                                        size="30" required="" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="mb-2">
+                                                        Email&nbsp;
+                                                        <span class="required">
+                                                            *
+                                                        </span>
+                                                    </label>
+                                                    <input class="form-control" name="email" type="email" value=""
+                                                        size="30" required="" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="mt-3">
+                                                    <input class="form-check-input" type="checkbox" value="" id="check1"
+                                                        checked />
+                                                    <label class="form-check-label" for="check1">
+                                                        Save my name, email, and website in this browser for the
+                                                        next time I comment.
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-submit mt-4">
+                                                    <div class="iq-button">
+                                                        <button name="submit" type="submit" id="submit"
+                                                            class="btn text-uppercase position-relative" value="Submit">
+                                                            <span class="button-text">Submit</span>
+                                                            <i class="fa-solid fa-play"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Episode End -->
+
+<div class="cast-tabs">
+    <div class="container-fluid">
+        <div class="content-details trending-info g-border iq-rtl-direction">
+            <ul class="iq-custom-tab tab-bg-fill d-flex nav nav-pills mb-5 list-inline" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active show" data-bs-toggle="pill" href="#cast-1" role="tab"
+                        aria-selected="true">Cast</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="pill" href="#crew-1" role="tab" aria-selected="false">Crew</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div id="cast-1" class="tab-pane animated fadeInUp active show" role="tabpanel">
+                    <div class="position-relative swiper swiper-card" data-slide="5" data-laptop="5" data-tab="3"
+                        data-mobile="2" data-mobile-sm="1.1" data-autoplay="false" data-loop="false"
+                        data-navigation="true" data-pagination="true">
+                        <ul class="list-inline swiper-wrapper">
+                            {% for a in TVshow.casts.all %}
+                            
+                            <li class="swiper-slide">
+                                <div class="cast-images m-0 row align-items-center position-relative">
+                                    
+                                    <div class="col-8 block-description pt-3">
+                                        <h6 class="iq-title">
+                                            {{a.name}}
+                                        </h6>
+                                        <div class="video-time d-flex align-items-center my-2">
+                                            <small class="text-white"></small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            {% empty %}
+                            <p> casts are not added yet..</p>
+                            
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div id="crew-1" class="tab-pane animated fadeInUp" role="tabpanel">
+                    <div class="position-relative swiper swiper-card" data-slide="5" data-laptop="5" data-tab="3"
+                        data-mobile="2" data-mobile-sm="1.1" data-autoplay="false" data-loop="false"
+                        data-navigation="true" data-pagination="true">
+                        <ul class="list-inline swiper-wrapper">
+                            {% for a in TVshow.crew.all %}
+                            <li class="swiper-slide">
+                                <div class="cast-images m-0 row align-items-center position-relative">
+                                    
+                                    <div class="col-8 block-description starring-desc pt-3">
+                                        <h6 class="iq-title">
+                                             {{a.name}} 
+                                        </h6>
+                                        <div class="video-time d-flex align-items-center my-2">
+                                            <small class="text-white"></small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            {% empty %}
+                            <p> Crews are not added yet..</p>
+                            
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    document.querySelectorAll('.seasonButton').forEach(button => {
+      button.addEventListener('click', function() {
+        document.getElementById('seasonSelect').value = this.value;
+        document.getElementById('seasonForm').submit();
+      });
+    });
+</script>
+    
+{% endblock content %}

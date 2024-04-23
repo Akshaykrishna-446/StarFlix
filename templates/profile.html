@@ -8,13 +8,20 @@
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
                 <div class="d-flex align-items-center gap-3">
                     <div class="account-logo d-flex align-items-center position-relative">
+                        {% if not user.profile_pic %}
+                        <img src="/static/images/person.jpeg"
+                            class="img-fluid object-cover rounded-3" alt="profile">
+                        {% else %}
                         <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}"
                             class="img-fluid object-cover rounded-3" alt="profile">
+                        {% endif %}
+                        
+
                         <i class="fa-regular fa-pen-to-square"></i>
                     </div>
                     <div>
-                        <h6 class="font-size-18 text-capitalize text-white fw-500">{{user.first_name}}</h6>
-                        <span class="font-size-14 text-white fw-500">{{user.email}}</span>
+                        <h6 class="font-size-18 text-capitalize text-white fw-500">{{user.first_name}} {{user.user_full_name}} </h6>
+                        <span class="font-size-14 text-white fw-500">{{user.email}} {{user.user_email}} </span>
                     </div>
                 </div>
                 <div class="iq-button">
@@ -44,30 +51,39 @@
                     <div id="playlist" class="tab-pane animated fadeInUp active show" role="tabpanel">
                         <div class="overflow-hidden">
                             <div class="d-flex align-items-center justify-content-between my-4">
-                                <h5 class="main-title text-capitalize mb-0">My Watchlist</h5>
+                                <h5 class="main-title text-capitalize mb-3">My Watchlist</h5>
                             </div>
                             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4">
+                                {% for i in watchlist %}
                                 <div class="col mb-4">
                                     <div class="watchlist-warpper card-hover-style-two">
                                         <div class="block-images position-relative w-100">
                                             <div class="img-box">
                                                 <a href="watchlist-detail.html"
                                                     class="position-absolute top-0 bottom-0 start-0 end-0"></a>
-                                                <img src="./assets/images/movies/playlist/01.webp" alt="movie-card"
+                                                <img src="/static/media/{{i.movie_id.movie_image}}" alt="movie-card"
                                                     class="img-fluid object-cover w-100 d-block border-0">
                                             </div>
                                             <div class="card-description">
-                                                <h5 class="text-capitalize fw-500"> <a href="">Play List 1</a> </h5>
+                                                <h5 class="text-capitalize fw-500"> <a href="">{{i.movie_id.title}}</a> </h5>
                                                 <div class="d-flex align-items-center gap-3">
                                                     <div class="d-flex align-items-center gap-1 font-size-12">
-                                                        <i class="fa-solid fa-earth-americas text-primary"></i>
+                                                        <i class="fa-regular fa-eye text-primary"></i>
                                                         <span
-                                                            class="text-body fw-semibold text-capitalize">Public</span>
+                                                            class="text-body fw-semibold text-capitalize">{{i.movie_id.movie_duration}}</span>
                                                     </div>
                                                     <div class="d-flex align-items-center gap-1 font-size-12">
-                                                        <i class="fa-regular fa-eye text-primary"></i>
-                                                        <span class="text-body fw-semibold text-capitalize">3
-                                                            Views</span>
+                                                        <i class=" fa fa-star text-primary"></i>
+                                                        <span class="text-body fw-semibold text-capitalize">{{i.movie_id.imdb_rating}}</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-end gap-1 font-size-12">
+                                                        <a href="{% url 'removeWatchlist' i.id %}">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" style="color: red;" viewBox="0 0 16 16">
+                                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                                            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                                                          </svg>
+                                                        <span class="text-body fw-semibold text-capitalize">Remove</span>
+                                                        </a>
                                                     </div>
 
                                                 </div>
@@ -75,7 +91,7 @@
                                         </div>
                                     </div>
                                 </div>
-
+                                {% endfor %}
                             </div>
                             
                         </div>
@@ -84,38 +100,46 @@
                     <div id="favorites" class="tab-pane animated fadeInUp" role="tabpanel">
                         <div class="overflow-hidden">
                             <div class="d-flex align-items-center justify-content-between my-4">
-                                <h5 class="main-title text-capitalize mb-0">My favourite</h5>
+                                <h5 class="main-title text-capitalize mb-3">My favourite</h5>
                             </div>
                             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4">
+                                {% for i in favourite %}
                                 <div class="col mb-4">
                                     <div class="watchlist-warpper card-hover-style-two">
                                         <div class="block-images position-relative w-100">
                                             <div class="img-box">
                                                 <a href="watchlist-detail.html"
                                                     class="position-absolute top-0 bottom-0 start-0 end-0"></a>
-                                                <img src="./assets/images/movies/playlist/01.webp" alt="movie-card"
+                                                <img src="/static/media/{{i.movie_id.movie_image}}" alt="movie-card"
                                                     class="img-fluid object-cover w-100 d-block border-0">
                                             </div>
                                             <div class="card-description">
-                                                <h5 class="text-capitalize fw-500"> <a href="">Play List 1</a> </h5>
+                                                <h5 class="text-capitalize fw-500"> <a href="">{{i.movie_id.title}}</a> </h5>
                                                 <div class="d-flex align-items-center gap-3">
                                                     <div class="d-flex align-items-center gap-1 font-size-12">
-                                                        <i class="fa-solid fa-earth-americas text-primary"></i>
+                                                        <i class="fa-regular fa-eye text-primary"></i>
                                                         <span
-                                                            class="text-body fw-semibold text-capitalize">Public</span>
+                                                            class="text-body fw-semibold text-capitalize">{{i.movie_id.movie_duration}}</span>
                                                     </div>
                                                     <div class="d-flex align-items-center gap-1 font-size-12">
-                                                        <i class="fa-regular fa-eye text-primary"></i>
-                                                        <span class="text-body fw-semibold text-capitalize">3
-                                                            Views</span>
+                                                        <i class=" fa fa-star text-primary"></i>
+                                                        <span class="text-body fw-semibold text-capitalize">{{i.movie_id.imdb_rating}}</span>
                                                     </div>
-
+                                                    <div class="d-flex justify-content-end gap-1 font-size-12">
+                                                        <a href="{% url 'removeFavourite' i.id %}">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" style="color: red;" viewBox="0 0 16 16">
+                                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                                            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                                                          </svg>
+                                                        <span class="text-body fw-semibold text-capitalize">Remove</span>
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
+                                {% endfor %}
                             </div>
                             
                         </div>
