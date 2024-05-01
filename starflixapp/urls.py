@@ -6,6 +6,8 @@ urlpatterns = [
     path('moviesHome', views.moviesHome, name='moviesHome'),
     path('TVshows', views.TVshows, name='TVshows'),
     path('TVshow_details/<id>', views.TVshow_details, name='TVshow_details'),
+    path('single_tvshow/<id>', views.single_tvshow, name='single_tvshow'),
+    path('allTvshows', views.allTvshows, name='allTvshows'),
     path('pricingpage', views.pricingpage, name='pricingpage'),
     path('login/', views.loginUser, name='login'),
     path('sign_out/', views.sign_out, name='sign_out'),
@@ -19,6 +21,10 @@ urlpatterns = [
     path('addToWatchlist/<id>', views.addToWatchlist, name='addToWatchlist'),
     path('addToFavourite/<id>', views.addToFavourite, name='addToFavourite'),
     path('removeWatchlist/<id>', views.removeWatchlist, name='removeWatchlist'),
+    path('removeWatchlistTV/<id>', views.removeWatchlistTV, name='removeWatchlistTV'),
     path('removeFavourite/<id>', views.removeFavourite, name='removeFavourite'),
+    path('removeFavouriteTV/<id>', views.removeFavouriteTV, name='removeFavouriteTV'),
+    path('tagsredirect/<tag>', views.tagsredirect, name='tagsredirect'),
+    path('category', views.category, name='category'),
     
 ]

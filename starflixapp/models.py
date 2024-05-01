@@ -19,6 +19,7 @@ class user_reg(models.Model):
     user_username=models.TextField(null=True)
     user_password=models.TextField(null=True)
     user_cpassword=models.TextField(null=True)
+    subscription=models.CharField(max_length=50,null=True)
     profile_pic = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
 
 
@@ -50,12 +51,13 @@ class Genre(models.Model):
 class Movies(models.Model):
     
 
-    title=models.TextField(max_length=100)
+    title=models.CharField(max_length=100)
     movie_desc=models.TextField(max_length=300)
     movie_image=models.ImageField(upload_to='movie_image/')
     movie_thumbnail=models.ImageField(upload_to='movie_thumbnail/')
     movie_genres = models.ForeignKey(Genre,on_delete=models.CASCADE,null=True)
     imdb_rating=models.FloatField()
+    language=models.CharField(max_length=100,null=True)
     movie_mon_yr=models.TextField(max_length=30,null=True)
     movie_duration=models.TextField(max_length=10)
     ageGroup=models.TextField(max_length=4,null=True)
@@ -65,19 +67,11 @@ class Movies(models.Model):
     upload_date = models.DateTimeField(auto_now_add=True)
     movie_trailer = models.FileField(upload_to='Movies_Trailers/')
     movie_file = models.FileField(upload_to='Movie_File/')
-    trendingORpriority=models.IntegerField(default=15)
+    trendingORpriority=models.IntegerField(default=0)
 
     def __str__(self):
         return self.title
     
-
-class Favourite(models.Model):
-    user_id=models.ForeignKey(user_reg,on_delete=models.CASCADE)
-    movie_id=models.ForeignKey(Movies,on_delete=models.CASCADE,default=None)
-
-class Watchlist(models.Model):
-    user_id=models.ForeignKey(user_reg,on_delete=models.CASCADE)
-    movie_id=models.ForeignKey(Movies,on_delete=models.CASCADE,default=None)
 
 
 class TVShow(models.Model):
@@ -86,6 +80,8 @@ class TVShow(models.Model):
     TVShow_image=models.ImageField(upload_to='TVshow_image/')
     TVShow_thumbnail=models.ImageField(upload_to='TVshow_thumbnail/')
     TVShow_genre = models.ForeignKey(Genre,on_delete=models.CASCADE,null=True)
+    howmanyseasons=models.IntegerField(null=True)
+    language=models.CharField(max_length=100,null=True)
     imdb_rating=models.FloatField()
     TVShow_mon_yr=models.TextField(max_length=30,null=True)
     ageGroup=models.TextField(max_length=4,null=True)
@@ -94,21 +90,23 @@ class TVShow(models.Model):
     Tags = models.ManyToManyField(Tags)
     upload_date = models.DateTimeField(auto_now_add=True)
     TVshow_trailer = models.FileField(upload_to='TVshow_Trailers/')
-    trendingORpriority=models.IntegerField(default=15)
+    trendingORpriority=models.IntegerField(default=0)
     
 
     def __str__(self):
         return self.title
+    
+
 
 class Season(models.Model):
-    show = models.ForeignKey(TVShow, on_delete=models.CASCADE, related_name='seasons')
+    show = models.ForeignKey(TVShow, on_delete=models.CASCADE, related_name='seasons',null=True)
     number = models.IntegerField()
 
     def __str__(self):
         return f"{self.show.title} - Season {self.number}"
 
 class Episode(models.Model):
-    season = models.ForeignKey(Season, on_delete=models.CASCADE, related_name='episodes')
+    season = models.ForeignKey(Season, on_delete=models.CASCADE, related_name='episodes',null=True)
     episode_title = models.CharField(max_length=200)
     episode_desc = models.TextField()
     number = models.IntegerField()
@@ -118,5 +116,20 @@ class Episode(models.Model):
     TVshow_file = models.FileField(upload_to='videos/')
 
     def __str__(self):
-        return f"{self.season} - {self.episode_title} - {self.number}"
+        return f"{self.season} -  episode - {self.number}"
     
+class Favourite(models.Model):
+    user_id=models.ForeignKey(user_reg,on_delete=models.CASCADE)
+    movie_id=models.ForeignKey(Movies,on_delete=models.CASCADE,default=None)
+
+class Watchlist(models.Model):
+    user_id=models.ForeignKey(user_reg,on_delete=models.CASCADE)
+    movie_id=models.ForeignKey(Movies,on_delete=models.CASCADE,default=None)
+
+class FavouriteTV(models.Model):
+    user_id=models.ForeignKey(user_reg,on_delete=models.CASCADE)
+    tvs_id=models.ForeignKey(Episode,on_delete=models.CASCADE,default=None) 
+
+class WatchlistTV(models.Model):
+    user_id=models.ForeignKey(user_reg,on_delete=models.CASCADE)
+    tvs_id=models.ForeignKey(Episode,on_delete=models.CASCADE,default=None)

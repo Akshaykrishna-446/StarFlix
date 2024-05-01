@@ -105,9 +105,7 @@
                                     <li class="nav-item">
                                         <a class="nav-link " href="{% url 'contactUs' %}"> Contact Us </a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link " href="{% url 'comingsoon' %}"> Coming Soon </a>
-                                    </li>
+                                    
                                     
                                     
                                     
@@ -213,8 +211,14 @@
                                 <ul class="dropdown-menu dropdown-menu-end dropdown-user border-0 p-0 m-0"
                                     aria-labelledby="navbarDropdown">
                                     <li class="user-info d-flex align-items-center gap-3 mb-3">
-                                        <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}" class="img-fluid" alt=""
-                                            loading="lazy">
+                                        {% if not user.profile_pic %}
+                                        <img src="/static/images/person.jpeg"
+                                            class="img-fluid object-cover rounded-3" alt="profile">
+                                        {% else %}
+                                        <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}"
+                                            class="img-fluid object-cover rounded-3" alt="profile">
+                                        {% endif %}
+                                        
                                         <span
                                             class="font-size-14 fw-500 text-capitalize text-white"> {{ user.first_name }} {{name}} </span>
                                     </li>

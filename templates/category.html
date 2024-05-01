@@ -1,0 +1,88 @@
+{% extends "blank_layout.html" %}
+{% load static %}
+{% block content %}
+
+<!--bread-crumb-->
+<div class="iq-breadcrumb" style="background-image: url(./assets/images/pages/01.webp);">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-sm-12">
+                <nav aria-label="breadcrumb" class="text-center">
+                    <h3 class="title">Movies And TV shows</h3>
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item"><a href="./index.html">Home</a></li>
+                        <li class="breadcrumb-item active">Category</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<!--bread-crumb-->
+
+
+<div class="section-padding">
+    <div class="container-fluid">
+        <div class="card-style-grid">
+            <div class="row row-cols-xl-4 row-cols-md-2 row-cols-1">
+                {% for i in catagory %}
+                <div class="col mb-4">
+                    <div class="iq-card card-hover">
+                        <div class="block-images position-relative w-100">
+                            <div class="img-box w-100">
+                                <a href="{% if i.movie_duration %}{% url 'single_movie' i.id %}{% else %}{% url 'TVshow_details' i.id %}{% endif %}"
+                                    class="position-absolute top-0 bottom-0 start-0 end-0"></a>
+                                <img src="/static/media/{% if i.movie_duration %}{{i.movie_image}}{% else %}{{i.TVShow_image}}{% endif %}" alt="{{d.title}}"
+                                    class="img-fluid object-cover w-100 d-block border-0">
+                            </div>
+                            <div class="card-description with-transition">
+                                <div class="cart-content">
+                                    <div class="content-left">
+                                        <h5 class="iq-title text-capitalize">
+                                            <a href="">{{i.title}}</a>
+                                        </h5>
+                                        <div class="movie-time d-flex align-items-center my-2">
+                                            <span class="movie-time-text font-normal">{% if i.movie_duration %}{{i.movie_duration}}{% else %}{{i.howmanyseasons}} Seasons{%endif%}</span>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="block-social-info align-items-center">
+                                <ul class="p-0 m-0 d-flex gap-2 music-play-lists">
+                                    <li class="share position-relative d-flex align-items-center text-center mb-0">
+                                        <span class="w-100 h-100 d-inline-block bg-transparent"> <a href="">
+                                            <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark" viewBox="0 0 16 16">
+                                                <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1z"/>
+                                            </svg></a>
+                                        </span>
+                                        
+                                    </li>
+                                    <li
+                                        class="share position-relative d-flex align-items-center text-center mb-0">
+                                        <span class="w-100 h-100 d-inline-block bg-transparent"> <a href="">
+                                            <i class="fa-regular fa-heart"></i></a>
+                                        </span>
+                                        
+                                    </li>
+                                </ul>
+                                <div class="iq-button">
+                                    <a href=""
+                                        class="btn text-uppercase position-relative rounded-circle">
+                                        <i class="fa-solid fa-play ms-0"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

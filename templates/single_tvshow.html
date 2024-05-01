@@ -1,0 +1,480 @@
+{% extends "blank_layout.html" %}
+{% load static %}
+{% block content %}
+
+<!-- Banner Start -->
+<div class="iq-main-slider site-video">
+    <div class="container-fluid">
+        {% if user.subscription == free %}
+        <div class="row">
+            <div class="alert alert-warning d-flex align-items-center justify-content-center" role="alert">
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                <div>
+                  You can't watch this movie, because you are not a paid user
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="pt-0">
+                    <video id="my-video" poster="/static/media/{{movie.movie_thumbnail}}"
+                        class="video-js vjs-big-play-centered w-100" controls preload="auto">
+                        <!-- <source src="/static/media/{{movie.movie_file}}" type="video/mp4" />
+                        <source src="/static/media/{{movie.movie_file}}" type="video/webm" /> -->
+                    </video>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="pt-0">
+                    <video id="my-video" poster="/static/media/{{episode.season.show.TVShow_thumbnail}}"
+                        class="video-js vjs-big-play-centered w-100" controls preload="auto">
+                        <source src="/static/media/{{episode.TVshow_file}}" type="video/mp4" />
+                        <source src="/static/media/{{episode.TVshow_file}}" type="video/webm" />
+                    </video>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+<!-- Banner End -->
+
+<div class="details-part">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <!-- Movie Description Start-->
+                <div class="trending-info mt-4 pt-0 pb-4">
+                    <div class="row">
+                        <div class="col-md-9 col-12 mb-auto">
+                            <div class="d-block d-lg-flex align-items-center">
+                                <h3 class="trending-text fw-bold text-uppercase my-0 fadeInLeft animated d-inline-block text-primary"
+                                    data-animation-in="fadeInLeft" data-delay-in="0.6"
+                                    style="opacity: 1; animation-delay: 0.6s">
+                                    {{episode.season.show.title}} : <span class="text-white">{{episode.episode_title}}</span>
+                                </h3>
+                                
+                            </div>
+                            <div class="slider-ratting d-flex align-items-center ms-lg-3 ms-0 mt-3 mb-3">
+                                <h5 class="text-white ms-2 me-4">S0{{episode.season.number}}E{{episode.number}} </h5>
+                                <ul
+                                    class="ratting-start p-0 m-0 list-inline text-warning d-flex align-items-center justify-content-left">
+                                    <li><i class="fa fa-star text-primary" aria-hidden="true"></i></li>
+                                    
+                                </ul>
+                                <span class="text-white ms-1">{{episode.season.show.imdb_rating}} <img src="{% static 'images/imdb-logo.svg' %}" alt="imdb logo"
+                                    class="img-fluid"></span>
+                            </div>
+                            
+                            <div class="d-flex flex-wrap align-items-center text-white text-detail flex-wrap mb-4">
+                                <span class="badge bg-secondary">{{episode.season.show.TVShow_genre}}</span>
+                                <span class="ms-3 font-Weight-500 genres-info">{{episode.TVshow_epi_duration}}</span>
+                                <span class="font-size-6"> &nbsp;&nbsp;&nbsp; <a href=""> <i class="fa-solid fa-circle"></i> </a> &nbsp;&nbsp;&nbsp;</span>
+                                <span class="trending-year trending-year-list font-Weight-500 genres-info">
+                                    {{episode.TVshow_epi_mon_yr}}
+                                </span>
+                                <span class="font-size-6"> &nbsp;&nbsp;&nbsp; <a href=""> <i class="fa-solid fa-circle"></i> </a> &nbsp;&nbsp;&nbsp;</span>
+                                <span class="trending-year trending-year-list font-Weight-500 genres-info">
+                                    {{episode.season.show.language}}
+                                </span>
+                            </div>
+                            <div class="d-flex align-items-center gap-4 flex-wrap mb-4">
+                                <ul class="list-inline p-0 share-icons music-play-lists mb-n2 mx-n2">
+                                    <form action="" method="post">
+                                        {% csrf_token %}
+                                        <li><span><button name="fav" type="submit" class="border-0 bg-transparent text-primary"><i class="fa-solid fa-heart "></button></i></span></li>
+
+                                        <li><span><button name="watchlist" type="submit" class="border-0 bg-transparent text-primary"><i class="fa-solid fa-plus"></i></button></span></li>
+
+                                        <li><span><button name="download" type="submit" class="border-0 bg-transparent text-primary"><i class="fa-solid fa-download"></i></button></span></li>
+                                    </form>
+                                </ul>
+                                
+                            </div>
+                            <ul class="iq-blogtag list-unstyled d-flex flex-wrap align-items-center gap-3 p-0">
+                                <li class="iq-tag-title text-primary mb-0">
+                                    <i class="fa fa-tags" aria-hidden="true"></i> Tags:
+                                </li>
+                                {% for i in episode.season.show.Tags.all %}
+                                <li>{{i.tag}}</li>{% if not forloop.last %}<span class="font-size-6"><a href=""><i class="fa-solid fa-circle"></i></a></span> {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="trailor-video col-md-3 col-12 mt-lg-0 mt-4 mb-md-0 mb-1 text-lg-right">
+                            <a href="/static/media/{{episode.season.show.TVshow_trailer}}" class="video-open playbtn text-decoration-none"
+                                tabindex="0">
+                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                    xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="80px"
+                                    height="80px" viewBox="0 0 213.7 213.7" enable-background="new 0 0 213.7 213.7"
+                                    xml:space="preserve">
+                                    <polygon class="triangle" fill="none" stroke-width="7" stroke-linecap="round"
+                                        stroke-linejoin="round" stroke-miterlimit="10"
+                                        points="73.5,62.5 148.5,105.8 73.5,149.1 "></polygon>
+                                    <circle class="circle" fill="none" stroke-width="7" stroke-linecap="round"
+                                        stroke-linejoin="round" stroke-miterlimit="10" cx="106.8" cy="106.8" r="103.3">
+                                    </circle>
+                                </svg>
+                                <span class="w-trailor "> Watch Trailer </span>
+                            </a>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+                <!-- Movie Description End -->
+                <!-- Movie Source Start -->
+                <div class="content-details trending-info">
+                    <ul class="iq-custom-tab tab-bg-gredient-center d-flex nav nav-pills align-items-center text-center mb-5 justify-content-center list-inline"
+                        role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active show" data-bs-toggle="pill" href="#description-01" role="tab"
+                                aria-selected="true">
+                                Description
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="pill" href="#review-01" role="tab"
+                                aria-selected="false">
+                                Rate &amp; Review
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="pill" href="#source-01" role="tab"
+                                aria-selected="false">
+                                Sources
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="description-01" class="tab-pane animated fadeInUp active show" role="tabpanel">
+                            <div class="description-content">
+                                <p>
+                                    {{episode.episode_desc}}
+                                </p>
+                            </div>
+                        </div>
+                        <div id="review-01" class="tab-pane animated fadeInUp" role="tabpanel">
+                            <div class="streamit-reviews">
+                                <div id="comments" class="comments-area validate-form">
+                                    <p class="masvideos-noreviews mt-3">
+                                        There are no reviews yet.
+                                    </p>
+                                </div>
+                                <div class="review_form">
+                                    <div class="comment-respond">
+                                        <h4 class="fw-500 my-2">
+                                            Be the first to review “{{episode.season.show.title}}”
+                                        </h4>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="mb-2">
+                                                        Your review
+                                                        <span class="required">
+                                                            *
+                                                        </span>
+                                                    </label>
+                                                    <textarea class="form-control" name="comment" cols="5" rows="8"
+                                                        required=""></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="mb-2">
+                                                        Name
+                                                        <span class="required">
+                                                            *
+                                                        </span>
+                                                    </label>
+                                                    <input class="form-control" name="author" type="text" value=""
+                                                        size="30" required="" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="mb-2">
+                                                        Email&nbsp;
+                                                        <span class="required">
+                                                            *
+                                                        </span>
+                                                    </label>
+                                                    <input class="form-control" name="email" type="email" value=""
+                                                        size="30" required="" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="mt-3 mt-3 d-flex gap-2 align-items-center">
+                                                    <input class="form-check-input mt-0" type="checkbox" value=""
+                                                        id="check1" checked />
+                                                    <label class="form-check-label" for="check1">
+                                                        Save my name, email, and website in this browser for the
+                                                        next time I comment.
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-submit mt-4">
+                                                    <div class="iq-button">
+                                                        <button name="submit" type="submit" id="submit"
+                                                            class="btn text-uppercase position-relative" value="Submit">
+                                                            <span class="button-text">Submit</span>
+                                                            <i class="fa-solid fa-play"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="source-01" class="tab-pane animated fadeInUp" role="tabpanel">
+                            <div class="source-list-content table-responsive">
+                                <table class="table custom-table">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                Links
+                                            </th>
+                                            <th>
+                                                Quality
+                                            </th>
+                                            <th>
+                                                Language
+                                            </th>
+                                            <th>
+                                                Player
+                                            </th>
+                                            <th>
+                                                Date Added
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="iq-button">
+                                                    <a href="./movie-detail.html"
+                                                        class="btn text-uppercase position-relative">
+                                                        <span class="button-text"> Play Now</span>
+                                                        <i class="fa-solid fa-play"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                1080p
+                                            </td>
+                                            <td>
+                                                english
+                                            </td>
+                                            <td>
+                                                MusicBee
+                                            </td>
+                                            <td>
+                                                2021-11-28
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="iq-button">
+                                                    <a href="./movie-detail.html"
+                                                        class="btn text-uppercase position-relative">
+                                                        <span class="button-text"> Play Now</span>
+                                                        <i class="fa-solid fa-play"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                800p
+                                            </td>
+                                            <td>
+                                                english
+                                            </td>
+                                            <td>
+                                                5KPlayer
+                                            </td>
+                                            <td>
+                                                2021-11-25
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="iq-button">
+                                                    <a href="./movie-detail.html"
+                                                        class="btn text-uppercase position-relative">
+                                                        <span class="button-text"> Play Now</span>
+                                                        <i class="fa-solid fa-play"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                720p
+                                            </td>
+                                            <td>
+                                                English
+                                            </td>
+                                            <td>
+                                                MediaMonkey
+                                            </td>
+                                            <td>
+                                                2021-11-20
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Movie Source End -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="cast-tabs">
+    <div class="container-fluid">
+        <div class="content-details trending-info g-border iq-rtl-direction">
+            <ul class="iq-custom-tab tab-bg-fill d-flex nav nav-pills mb-5 " role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active show" data-bs-toggle="pill" href="#cast-1" role="tab"
+                        aria-selected="true">Cast</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="pill" href="#crew-1" role="tab" aria-selected="false">Crew</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div id="cast-1" class="tab-pane animated fadeInUp active show" role="tabpanel">
+                    <div class="position-relative swiper swiper-card" data-slide="5" data-laptop="5" data-tab="3"
+                        data-mobile="2" data-mobile-sm="1" data-autoplay="false" data-loop="false"
+                        data-navigation="true" data-pagination="true">
+                        <ul class="list-inline swiper-wrapper">
+                            {% for a in episode.season.show.casts.all %}
+                            <li class="swiper-slide">
+                                <div class="cast-images m-0 row align-items-center position-relative">
+                                    
+                                    <div class="col-8 block-description pt-3">
+                                        <h6 class="iq-title">
+                                            {{a.name}}
+                                        </h6>
+                                        <div class="video-time d-flex align-items-center my-2">
+                                            <small class="text-white"></small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div id="crew-1" class="tab-pane animated fadeInUp" role="tabpanel">
+                    <div class="position-relative swiper swiper-card" data-slide="5" data-laptop="5" data-tab="3"
+                        data-mobile="2" data-mobile-sm="2" data-autoplay="false" data-loop="false"
+                        data-navigation="true" data-pagination="true">
+                        <ul class="list-inline swiper-wrapper">
+                            {% for a in episode.season.show.crew.all %}
+                            <li class="swiper-slide">
+                                <div class="cast-images m-0 row align-items-center position-relative">
+                                    
+                                    <div class="col-8 block-description starring-desc pt-3">
+                                        <h6 class="iq-title">
+                                            {{a.name}}
+                                        </h6>
+                                        <div class="video-time d-flex align-items-center my-2">
+                                            <small class="text-white"></small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="recommended-block">
+    <div class="container-fluid">
+        <div class="overflow-hidden">
+            <div class="d-flex align-items-center justify-content-between px-3 pt-2 my-4">
+                <h5 class="main-title text-capitalize mb-0">Related Movies</h5>
+            </div>
+            <div class="card-style-slider">
+                <div class="position-relative swiper swiper-card" data-slide="5" data-laptop="5" data-tab="2"
+                    data-mobile="2" data-mobile-sm="2" data-autoplay="false" data-loop="true" data-navigation="true"
+                    data-pagination="true">
+                    <ul class="p-0 swiper-wrapper m-0  list-inline">
+                        {% for i in related_show %}
+                        <li class="swiper-slide">
+                            <div class="iq-card card-hover">
+                                <div class="block-images position-relative w-100">
+                                    <div class="img-box w-100">
+                                        <a href="{% url 'TVshow_details' i.id %}"
+                                            class="position-absolute top-0 bottom-0 start-0 end-0"></a>
+                                        <img src="/static/media/{{i.TVShow_image}}" alt="{{i.title}}"
+                                            class="img-fluid object-cover w-100 d-block border-0">
+                                    </div>
+                                    <div class="card-description with-transition">
+                                        <div class="cart-content">
+                                            <div class="content-left">
+                                                <h6 class="iq-title text-capitalize">
+                                                    <a href="{% url 'single_movie' i.id %}">{{i.title}}</a>
+                                                </h6>
+                                                <div class="movie-time d-flex align-items-center my-2">
+                                                    <span class="movie-time-text font-normal">{{i.howmanyseasons}} Seasons</span>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="block-social-info align-items-center">
+                                        <ul class="p-0 m-0 d-flex gap-2 music-play-lists">
+                                            <li class="share position-relative d-flex align-items-center text-center mb-0">
+                                                <span class="w-100 h-100 d-inline-block bg-transparent"> <a href="">
+                                                    <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark" viewBox="0 0 16 16">
+                                                        <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1z"/>
+                                                    </svg></a>
+                                                </span>
+                                                
+                                            </li>
+                                            <li
+                                                class="share position-relative d-flex align-items-center text-center mb-0">
+                                                <span class="w-100 h-100 d-inline-block bg-transparent"> <a href="">
+                                                    <i class="fa-regular fa-heart"></i></a>
+                                                </span>
+                                                
+                                            </li>
+                                        </ul>
+                                        <div class="iq-button">
+                                            <a href="{% url 'TVshow_details' i.id %}"
+                                                class="btn text-uppercase position-relative rounded-circle">
+                                                <i class="fa-solid fa-play ms-0"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <div class="swiper-button swiper-button-next"></div>
+                    <div class="swiper-button swiper-button-prev"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+{% endblock content %}

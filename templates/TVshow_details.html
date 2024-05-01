@@ -14,20 +14,12 @@
                         <ul
                             class="ratting-start p-0 m-0 list-inline text-warning d-flex align-items-center justify-content-left">
                             <li>
-                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class=" text-primary fa fa-star" aria-hidden="true"></i>
                             </li>
-                            <li>
-                                <i class="fa fa-star" aria-hidden="true"></i>
-                            </li>
-                            <li>
-                                <i class="fa fa-star" aria-hidden="true"></i>
-                            </li>
-                            <li>
-                                <i class="fa fa-star-half" aria-hidden="true"></i>
-                            </li>
-                        </ul>
-                        <span class="text-white">{{TVshow.imdb_rating}} <img src="{% static 'images/imdb-logo.svg' %}"
+                            <span class="text-white ms-1">{{TVshow.imdb_rating}} <img src="{% static 'images/imdb-logo.svg' %}"
                                 alt="imdb logo" class="img-fluid"></span>
+                        </ul>
+                        
                     </div>
                     <ul class="p-0 mt-2 list-inline d-flex flex-wrap movie-tag">
                         <li class="trending-list">
@@ -39,8 +31,8 @@
                     </ul>
                     <div class="d-flex flex-wrap align-items-center gap-3 font-size-20 mb-3 fw-500 text-white">
 
-                        <span>Seasons : {{showcount}} </span>
-                        <span class="font-size-6"><i class="fa-solid fa-circle"></i></span>
+                        <span> {{TVshow.howmanyseasons}} Seasons </span>
+                        <span class="font-size-6"> <i class="text-primary fa-solid fa-circle"></i></span>
                         <span>{{TVshow.TVShow_mon_yr}}</span>
                     </div>
                     <p class="line-count-2 my-3">
@@ -122,13 +114,13 @@
                             <div class="col-lg-3 col-sm-12 col-md-6">
                                 <div class="episode-block">
                                     <div class="block-image position-relative">
-                                        <a href="">
+                                        <a href="{% url 'single_tvshow' episode.id %}">
                                             <img src="/static/media/{{episode.TVShow_epi_image}}"
                                                 class="img-fluid img-zoom" alt="showImg-" loading="lazy">
                                         </a>
                                         <div class="episode-number">S0{{episode.season.number}}E{{episode.number}}</div>
                                         <div class="episode-play">
-                                            <a href="./episode.html" tabindex="0"><i class="fa-solid fa-play"></i></a>
+                                            <a href="{% url 'single_tvshow' episode.id %}" tabindex="0"><i class="fa-solid fa-play"></i></a>
                                         </div>
                                     </div>
                                     <div class="epi-desc p-3">
@@ -136,7 +128,7 @@
                                             <span class="border-gredient-left text-white rel-date">{{ episode.TVshow_epi_mon_yr }}</span>
                                             <span class="text-primary run-time">{{episode.TVshow_epi_duration}}</span>
                                         </div>
-                                        <a href="./episode.html">
+                                        <a href="{% url 'single_tvshow' episode.id %}">
                                             <h5 class="epi-name text-white mb-0"> {{episode.episode_title}} </h5>
                                         </a>
                                     </div>
