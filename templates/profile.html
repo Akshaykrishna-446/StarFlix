@@ -12,25 +12,36 @@
                         <img src="/static/images/person.jpeg"
                             class="img-fluid object-cover rounded-3" alt="profile">
                         {% else %}
-                        <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}"
+                        
+                        <img src="{% if user.socialaccount_set.all.0.get_avatar_url %}{{ user.socialaccount_set.all.0.get_avatar_url }}{% else %}{{ user.profile_pic.url }}{%endif%} "
                             class="img-fluid object-cover rounded-3" alt="profile">
                         {% endif %}
-                        
 
-                        <i class="fa-regular fa-pen-to-square"></i>
+                        
                     </div>
+                    
                     <div>
                         <h6 class="font-size-18 text-capitalize text-white fw-500">{{user.first_name}} {{user.user_full_name}} </h6>
                         <span class="font-size-14 text-white fw-500">{{user.email}} {{user.user_email}} </span>
                     </div>
                 </div>
                 <div class="iq-button">
-                    <a href="pricing-plan.html" class="btn text-uppercase position-relative">
-                        <span class="button-text">Subscription</span>
-                        <i class="fa-solid fa-play"></i>
-                    </a>
+                    <div class="me-5  position-relative" style="width: 100px;">
+                        <span class="">Current Plan : </span><h4 class="text-uppercase mt-1 text-primary">{{user.subscription}}</h4>
+                       
+                    </div>
                 </div>
             </div>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+        
+                <input class="mt-1" type="file" id="profile_pic" name="profile_pic"
+                    accept="image/*"><br>
+                <button class="  mt-2" style="background-color: green; border: none;"
+                    
+                    type="submit">Update Profile
+                </button>
+            </form>
         </div>
     </div>
     <div class="tabs">

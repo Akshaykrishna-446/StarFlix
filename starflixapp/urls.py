@@ -26,5 +26,6 @@ urlpatterns = [
     path('removeFavouriteTV/<id>', views.removeFavouriteTV, name='removeFavouriteTV'),
     path('tagsredirect/<tag>', views.tagsredirect, name='tagsredirect'),
     path('category', views.category, name='category'),
+    path('searchresult', views.searchresult, name='searchresult'),
     
 ]

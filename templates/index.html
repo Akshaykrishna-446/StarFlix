@@ -135,34 +135,43 @@
     <div class="container-fluid">
         <div class="overflow-hidden">
             <div class="d-flex align-items-center justify-content-between px-2 px-md-3 mb-4">
-                <h5 class="main-title text-capitalize mb-0">continue watching</h5>
+                <h5 class="main-title text-capitalize mb-0">Recently Watched</h5>
             </div>
             <div class="position-relative swiper swiper-card" data-slide="4" data-laptop="4" data-tab="3"
                 data-mobile="2" data-mobile-sm="2" data-autoplay="false" data-loop="false" data-navigation="true"
                 data-pagination="true">
                 <ul class="p-0 swiper-wrapper m-0  list-inline">
                     <!-- continue watching slide, loop here -->
+                    {% for i in lastplayed %}
                     <li class="swiper-slide">
                         <div class="iq-watching-block">
                             <div class="block-images position-relative">
                                 <div class="iq-image-box overly-images">
                                     <a href="./movie-detail.html" class="d-block">
-                                        <img src="{% static 'images/transf.jpeg' %}"
+                                        <img src="/static/media/{% if i.movie_id.movie_duration %}{{i.movie_id.movie_thumbnail}}{% else %}{{i.epi_id.season.show.TVShow_thumbnail}}{% endif %}"
                                          alt="movie-card"
                                             class="img-fluid object-cover w-100 d-block border-0">
                                     </a>
                                 </div>
                                 <div class="iq-preogress">
-                                    <span class="data-left-timing font-size-14 fw-500 text-lowercase">70 of 230
-                                        m</span>
+                                    <span class="data-left-timing font-size-14 fw-500 text-capitalize">{% if i.movie_id.movie_duration %}{{i.movie_id.title}} <br> {{i.movie_id.movie_duration}} {% else %}{{i.epi_id.season.show.title}}: <span class="text-primary">{{i.epi_id.episode_title}}</span><br> S{{i.epi_id.season.number}}E{{i.epi_id.number}} {% endif %}</span>
                                     <div class="progress" role="progressbar" aria-label="Example 2px high"
                                         aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="height: 1px">
-                                        <div class="progress-bar" style="width: 50%"></div>
+                                        {% if i.movie_id.movie_duration %}
+                                        <div class="progress-bar" style="width: 30%"></div>
+                                        {% else %}
+                                        <div class="progress-bar" style="width: 70%"></div>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </li>
+                    {% empty %}
+
+                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;you didn't Watch Any Movies Or TV shows Yet
+
+                    {% endfor %}
                     <!-- end -->
                 </ul>
                 <div class="swiper-button swiper-button-next"></div>

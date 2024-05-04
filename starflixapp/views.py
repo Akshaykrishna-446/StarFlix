@@ -15,25 +15,34 @@ def index(request):
     trending_movies=Movies.objects.order_by('trendingORpriority')[:10]
     trending_tvshow=Episode.objects.all()
     All_movies=Movies.objects.all()
-
     trending_movie=Movies.objects.order_by('trendingORpriority')[:1]
-    
     popular_content = sorted(
         chain(popular_movie, popular_tvshow),
         key=lambda instance: instance.id,
         reverse=True
     )[:10]
     
+    moviess=LastplayedMovie.objects.all()
+    showss=LastplayedTV.objects.all()
+    lastplayed = sorted(
+        chain(moviess, showss),
+        key=lambda instance: instance.watched_at,
+        reverse=True
+    )
+
 
     name=""
+    
     if "userID" in request.session:
         u_id=request.session["userID"]
-        user=user_reg.objects.get(user__id=u_id)
-        name=user.user_full_name
+        user1=user_reg.objects.get(user__id=u_id)
+        
+        name=user1
         
     context={
         'movie':movie,
         'name':name,
+        'lastplayed':lastplayed,
         'popular_content':popular_content,
         'latest_movies':latest_movies,
         'trending_movies':trending_movies,
@@ -51,9 +60,15 @@ def moviesHome(request):
     movie=Movies.objects.all()
     latest_movie=Movies.objects.order_by('-id')[:4]
     popular_movie=Movies.objects.order_by('-imdb_rating')[:10]
+    name=""
     
+    if "userID" in request.session:
+        u_id=request.session["userID"]
+        user1=user_reg.objects.get(user__id=u_id)
+        
+        name=user1
     context={
-
+        'name':name,
         'movie':movie,
         'latest_movie':latest_movie,
         'popular_movie':popular_movie,
@@ -68,8 +83,15 @@ def TVshows(request):
     Tvshow=TVShow.objects.all()
     popular_tvshow=TVShow.objects.order_by('-imdb_rating')[:10]
     latest_tvshow=TVShow.objects.order_by('-id')[:4]
-
+    name=""
+    
+    if "userID" in request.session:
+        u_id=request.session["userID"]
+        user1=user_reg.objects.get(user__id=u_id)
+        
+        name=user1
     context={
+        'name':name,
         'Tvshow':Tvshow,
         'popular_tvshow':popular_tvshow,
         'latest_tvshow':latest_tvshow,
@@ -105,8 +127,18 @@ def single_tvshow(request,id):
     u_id=request.session["userID"]
     user=user_reg.objects.get(user__id=u_id) 
     episodes=Episode.objects.get(id=id)
-    genre=episodes.season.show.TVShow_genre
-    related_show=TVShow.objects.filter(TVShow_genre=genre)
+    season_id=episodes.season.id
+    existing_entry = LastplayedTV.objects.filter(epi_id=episodes, user_id=user)
+    if existing_entry:
+
+        existing_entry.delete()
+    obj=LastplayedTV.objects.create(epi_id=episodes,
+                                    user_id=user
+                                    )
+    obj.save()
+
+    related_epi=Episode.objects.filter(season=season_id).exclude(id=id)
+
     if 'fav' in request.POST:
         u_id=request.session["userID"]
         user=user_reg.objects.get(user__id=u_id)
@@ -132,7 +164,7 @@ def single_tvshow(request,id):
     context={
         'episode':episodes,
         'user':user,
-        'related_show':related_show
+        'related_show':related_epi
     }
     return render(request,'single_tvshow.html',context)
 
@@ -144,6 +176,25 @@ def allTvshows(request):
     }
 
     return render(request,'allTvshows.html',context)
+def searchresult(request):
+    
+    if 'search' in request.POST:
+        query_name = request.POST['searched']
+        if query_name:
+            mresults = Movies.objects.filter(title__contains=query_name)
+            tresults = TVShow.objects.filter(title__contains=query_name)
+            results = sorted(
+            chain(mresults, tresults),
+            key=lambda instance: instance.id,
+            reverse=True
+            )
+    
+            context={
+                "results":results,
+            }
+    
+
+    return render(request,'searchresult.html',context)
 def pricingpage(request):
 
     if request.POST and 'free' in request.POST:
@@ -201,6 +252,14 @@ def profile(request):
         reverse=True
     )    
     
+    try:
+        if request.method == 'POST' and request.FILES['profile_pic']:
+            user_profile = user_reg.objects.get(user__id=u_id)
+            user_profile.profile_pic = request.FILES['profile_pic']
+            user_profile.save()
+            return redirect('profile')
+    except:
+        return redirect('profile')
 
     context={
         'watchlist':bwatchlist,
@@ -213,7 +272,15 @@ def profile(request):
 def tags(request):
 
     tags=Tags.objects.all()
+    name=""
+    
+    if "userID" in request.session:
+        u_id=request.session["userID"]
+        user1=user_reg.objects.get(user__id=u_id)
+        
+        name=user1
     context={
+        'name':name,
         'tags':tags
     }
 
@@ -231,7 +298,8 @@ def tagsredirect(request,tag):
         chain(movies, tvshow),
         key=lambda instance: instance.id,
         reverse=True
-        )[:10]
+        )
+
     except Tags.DoesNotExist:
         movies = []
 
@@ -239,7 +307,8 @@ def tagsredirect(request,tag):
 
     
     context={
-        "catagory":catagory
+        "catagory":catagory,
+        'tag':tag,
     }
     return render(request,'category.html',context)
 def category(request):
@@ -248,13 +317,33 @@ def category(request):
     return render(request,'category.html')
 def aboutUs(request):
 
+    name=""
+    
+    if "userID" in request.session:
+        u_id=request.session["userID"]
+        user1=user_reg.objects.get(user__id=u_id)
+        
+        name=user1
 
-    return render(request,'aboutUs.html')
+    context={
+        'name':name,
+    }
+    return render(request,'aboutUs.html',context)
 
 def contactUs(request):
+    name=""
+    
+    if "userID" in request.session:
+        u_id=request.session["userID"]
+        user1=user_reg.objects.get(user__id=u_id)
+        
+        name=user1
 
+    context={
+        'name':name,
+    }
 
-    return render(request,'contactUs.html')
+    return render(request,'contactUs.html',context)
 
 def comingsoon(request):
 
@@ -311,12 +400,27 @@ def All_movies(request):
 
 def single_movie(request,id):
     u_id=request.session["userID"]
-    user=user_reg.objects.get(user__id=u_id) 
+    user=user_reg.objects.get(user__id=u_id)
+    sub=user.subscription
+    
     movie=Movies.objects.get(id=id)
     genre=movie.movie_genres
     related_movie=Movies.objects.filter(movie_genres=genre)
-    print('444444444444444444444444444444444444444444444')
-    print(id)
+    
+
+    existing_entry = LastplayedMovie.objects.filter(movie_id=movie, user_id=user)
+    if existing_entry:
+
+        existing_entry.delete()
+
+    
+  
+    obj=LastplayedMovie.objects.create(movie_id=movie,
+                                user_id=user,
+                                
+                                )
+    obj.save()
+    
     if 'fav' in request.POST:
         u_id=request.session["userID"]
         user=user_reg.objects.get(user__id=u_id)
@@ -344,10 +448,39 @@ def single_movie(request,id):
     context={
         'movie':movie,
         'related_movie':related_movie,
-        'user':user
+        'user':sub
     }
 
     return render(request,'single_movie.html',context)
+
+""" def watch_movie(request, id):
+
+    u_id=request.session["userID"]
+    user=user_reg.objects.get(user__id=u_id)
+    movie = Movies.objects.get(id=id)
+    print('444444444444444444444444444444444444444444444')
+
+    print(id)
+
+    minutes_watched = int(request.POST.get('minutes_watched'))
+    print('3333333333333333333333333333333333333333')
+
+    print(minutes_watched)
+    existing_entry = LastplayedMovie.objects.filter(movie_id=movie, user_id=user)
+    if existing_entry:
+
+        existing_entry.delete()
+
+    if minutes_watched > 0:
+  
+        obj=LastplayedMovie.objects.create(movie_id=movie,
+                                    user_id=user,
+                                    minutes_watched=minutes_watched,
+                                    )
+        obj.save()
+
+    return redirect('single_movie')
+ """
 
 def addToWatchlist(request,id):
 

@@ -133,3 +133,13 @@ class FavouriteTV(models.Model):
 class WatchlistTV(models.Model):
     user_id=models.ForeignKey(user_reg,on_delete=models.CASCADE)
     tvs_id=models.ForeignKey(Episode,on_delete=models.CASCADE,default=None)
+
+class LastplayedMovie(models.Model):
+    user_id=models.ForeignKey(user_reg,on_delete=models.CASCADE)
+    movie_id=models.ForeignKey(Movies,on_delete=models.CASCADE,null=True)
+    watched_at = models.DateTimeField(auto_now_add=True,null=True)
+
+class LastplayedTV(models.Model):
+    user_id=models.ForeignKey(user_reg,on_delete=models.CASCADE)
+    epi_id=models.ForeignKey(Episode,on_delete=models.CASCADE,null=True)
+    watched_at = models.DateTimeField(auto_now_add=True,null=True)

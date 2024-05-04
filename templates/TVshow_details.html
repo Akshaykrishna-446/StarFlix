@@ -47,14 +47,7 @@
                         <h4 class="text-white fw-bold m-0">Watch Trailer</h4>
                     </a>
                 </div>
-                <div class="d-flex align-items-center flex-wrap gap-4 mb-4">
-                    <ul class="list-inline p-0 m-0 share-icons music-play-lists mb-n2 mx-n2">
-
-                        <li><span><i class="fa-solid fa-heart"></i></span></li>
-                        <li><span><i class="fa-solid fa-plus"></i></span></li>
-                    </ul>
-
-                </div>
+                
                 <ul class="iq-blogtag list-unstyled d-flex flex-wrap align-items-center gap-3 p-0">
                     <li class="iq-tag-title text-primary mb-0">
                         <i class="fa fa-tags" aria-hidden="true"></i> Tags:
@@ -86,7 +79,7 @@
                     </select>
                     <div id="buttonsContainer">
                       {% for a in seasons %}
-                        <button type="button" class="seasonButton btn" style="border: 1px solid green;" value="{{ a.id }}">Season {{ a.number }}</button>
+                        <button type="button" class="seasonButton btn-primary" style="border: 1px solid green; background-color: black; font-size: medium; width: 90px; height: 40px;" value="{{ a.id }}">Season {{ a.number }}</button>
                       {% endfor %}
                     </div>
                     <button type="submit" id="submitBtn" style="display:none;">Go</button>

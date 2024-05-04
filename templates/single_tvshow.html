@@ -17,8 +17,7 @@
                 <div class="pt-0">
                     <video id="my-video" poster="/static/media/{{movie.movie_thumbnail}}"
                         class="video-js vjs-big-play-centered w-100" controls preload="auto">
-                        <!-- <source src="/static/media/{{movie.movie_file}}" type="video/mp4" />
-                        <source src="/static/media/{{movie.movie_file}}" type="video/webm" /> -->
+                        
                     </video>
                 </div>
             </div>
@@ -28,7 +27,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="pt-0">
-                    <video id="my-video" poster="/static/media/{{episode.season.show.TVShow_thumbnail}}"
+                    <video id="my-video" autoplay poster="/static/media/{{episode.season.show.TVShow_thumbnail}}"
                         class="video-js vjs-big-play-centered w-100" controls preload="auto">
                         <source src="/static/media/{{episode.TVshow_file}}" type="video/mp4" />
                         <source src="/static/media/{{episode.TVshow_file}}" type="video/webm" />
@@ -53,12 +52,12 @@
                                 <h3 class="trending-text fw-bold text-uppercase my-0 fadeInLeft animated d-inline-block text-primary"
                                     data-animation-in="fadeInLeft" data-delay-in="0.6"
                                     style="opacity: 1; animation-delay: 0.6s">
-                                    {{episode.season.show.title}} : <span class="text-white">{{episode.episode_title}}</span>
+                                    {{episode.season.show.title}} : <span class="text-secondary">{{episode.episode_title}}</span>
                                 </h3>
                                 
                             </div>
                             <div class="slider-ratting d-flex align-items-center ms-lg-3 ms-0 mt-3 mb-3">
-                                <h5 class="text-white ms-2 me-4">S0{{episode.season.number}}E{{episode.number}} </h5>
+                                <h5 class="text-white ms-2 me-4">S{{episode.season.number}}E{{episode.number}} </h5>
                                 <ul
                                     class="ratting-start p-0 m-0 list-inline text-warning d-flex align-items-center justify-content-left">
                                     <li><i class="fa fa-star text-primary" aria-hidden="true"></i></li>
@@ -258,7 +257,7 @@
                                         <tr>
                                             <td>
                                                 <div class="iq-button">
-                                                    <a href="./movie-detail.html"
+                                                    <a href="{% url 'single_tvshow' episode.id %}"
                                                         class="btn text-uppercase position-relative">
                                                         <span class="button-text"> Play Now</span>
                                                         <i class="fa-solid fa-play"></i>
@@ -281,7 +280,7 @@
                                         <tr>
                                             <td>
                                                 <div class="iq-button">
-                                                    <a href="./movie-detail.html"
+                                                    <a href="{% url 'single_tvshow' episode.id %}"
                                                         class="btn text-uppercase position-relative">
                                                         <span class="button-text"> Play Now</span>
                                                         <i class="fa-solid fa-play"></i>
@@ -304,7 +303,7 @@
                                         <tr>
                                             <td>
                                                 <div class="iq-button">
-                                                    <a href="./movie-detail.html"
+                                                    <a href="{% url 'single_tvshow' episode.id %}"
                                                         class="btn text-uppercase position-relative">
                                                         <span class="button-text"> Play Now</span>
                                                         <i class="fa-solid fa-play"></i>
@@ -404,7 +403,7 @@
     <div class="container-fluid">
         <div class="overflow-hidden">
             <div class="d-flex align-items-center justify-content-between px-3 pt-2 my-4">
-                <h5 class="main-title text-capitalize mb-0">Related Movies</h5>
+                <h5 class="main-title text-capitalize mb-0">Remaining Episosed In this Season</h5>
             </div>
             <div class="card-style-slider">
                 <div class="position-relative swiper swiper-card" data-slide="5" data-laptop="5" data-tab="2"
@@ -416,19 +415,20 @@
                             <div class="iq-card card-hover">
                                 <div class="block-images position-relative w-100">
                                     <div class="img-box w-100">
-                                        <a href="{% url 'TVshow_details' i.id %}"
+                                        <a href="{% url 'single_tvshow' i.id %}"
                                             class="position-absolute top-0 bottom-0 start-0 end-0"></a>
-                                        <img src="/static/media/{{i.TVShow_image}}" alt="{{i.title}}"
+                                        <img src="/static/media/{{i.TVShow_epi_image}}" alt="{{i.episode_title}}"
                                             class="img-fluid object-cover w-100 d-block border-0">
                                     </div>
                                     <div class="card-description with-transition">
                                         <div class="cart-content">
+
                                             <div class="content-left">
-                                                <h6 class="iq-title text-capitalize">
-                                                    <a href="{% url 'single_movie' i.id %}">{{i.title}}</a>
+                                                <h6 class="iq-title text-primary text-capitalize">
+                                                    <a href="{% url 'single_tvshow' i.id %}">{{i.season.show.title}}: <span class="text-secondary">{{i.episode_title}}</span></a>
                                                 </h6>
                                                 <div class="movie-time d-flex align-items-center my-2">
-                                                    <span class="movie-time-text font-normal">{{i.howmanyseasons}} Seasons</span>
+                                                    <span class="movie-time-text font-normal my-1 "> S{{i.season.number}}E{{i.number}} <br>{{i.TVshow_epi_duration}}</span>
                                                 </div>
                                             </div>
                                             
@@ -453,7 +453,7 @@
                                             </li>
                                         </ul>
                                         <div class="iq-button">
-                                            <a href="{% url 'TVshow_details' i.id %}"
+                                            <a href="{% url 'single_tvshow' i.id %}"
                                                 class="btn text-uppercase position-relative rounded-circle">
                                                 <i class="fa-solid fa-play ms-0"></i>
                                             </a>

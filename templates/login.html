@@ -172,18 +172,18 @@
                             <input class="input" type="password" id="password" name="pass" required>
                         </div>
 
-                        <br><br><br> <a href="{% provider_login_url 'google' %}?next=/">Login Using Google</a><br><br><br>
+                        
 
 
                         <div class="form-group iq-button">
                             <button name="userlogin" class="btn" style="margin-top: 10px;" type="submit">Login</button>
                         </div>
-                        <p>Don't have an account? <a href="#" id="flipToRegister">Register</a></p>
+                        <p style="margin-top: 50px;">Don't have an account? <a href="#" id="flipToRegister">Register</a></p>
                     </form>
                 </div>
                 <div class="back">
-                    <div class="pricing-plan-header">
-                        <h4 class="plan-name text-capitalize text-body mb-0">Register Here</h4>
+                    <div class="pricing-plan-header " >
+                        <h4 class="plan-name text-capitalize text-body mb-0" >Register Here</h4>
                     </div>
                     <form id="registerForm" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
