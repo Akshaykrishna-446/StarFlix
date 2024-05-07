@@ -18,7 +18,7 @@
                     </div>
                     <!--Logo -->
                     <div class="logo-default">
-                        <a class="navbar-brand text-primary" href="./index.html">
+                        <a class="navbar-brand text-primary" href="{% url 'index' %}">
                             <img class="img-fluid logo" src="{% static 'images/starflixlogo.png' %}" loading="lazy"
                                 alt="StarFlix" />
                         </a>
@@ -176,7 +176,10 @@
                             <li class="nav-item dropdown">
                                 
                                 <a href="{% url 'login' %}" class="nav-link" >
-                                    Sign In
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-in-right text-primary" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0z"/>
+                                        <path fill-rule="evenodd" d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
+                                    </svg> LOGIN
                                 </a>
                             </li>
                             {% endif %}
@@ -186,8 +189,8 @@
                                 <a class="nav-link d-flex align-items-center" href="#" id="navbarDropdown"
                                     role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <div class="btn-icon rounded-pill user-icons">
-                                        <span class="btn-inner">
-                                            <svg class="icon-18" width="18" viewBox="0 0 24 24" fill="none"
+                                        <span class="btn-inner text-primary">
+                                            <svg class="icon-18" width="18" viewBox="0 0 24 24" fill="none" 
                                                 xmlns="http://www.w3.org/2000/svg">
                                                 <path fill-rule="evenodd" clip-rule="evenodd"
                                                     d="M9.87651 15.2063C6.03251 15.2063 2.74951 15.7873 2.74951 18.1153C2.74951 20.4433 6.01251 21.0453 9.87651 21.0453C13.7215 21.0453 17.0035 20.4633 17.0035 18.1363C17.0035 15.8093 13.7415 15.2063 9.87651 15.2063Z"
@@ -212,13 +215,10 @@
                                     <li class="user-info d-flex align-items-center gap-3 mb-3">
                                         {% if not name.profile_pic %}
 
-                                            {% if user.socialaccount_set.all.0.get_avatar_url %}
-                                                <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}"
-                                                class="img-fluid object-cover rounded-3" alt="profile">
-                                            {% else %}
-                                                <img src="/static/images/person.jpeg"
-                                                class="img-fluid object-cover rounded-3" alt="profile">
-                                            {% endif %}
+                                            
+                                            <img src="/static/images/person.jpeg"
+                                            class="img-fluid object-cover rounded-3" alt="profile">
+                                            
 
                                         {% else %}
                                         
@@ -228,7 +228,7 @@
                                         {% endif %}
                                         
                                         <span
-                                            class="font-size-14 fw-500 text-capitalize text-white"> {{ user.first_name }} {{name.user_full_name}} </span>
+                                            class="font-size-14 fw-500 text-capitalize text-white">{{name.user_full_name}} </span>
                                     </li>
                                     <li>
                                         <a href="{% url 'profile' %}"

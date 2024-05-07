@@ -147,7 +147,7 @@
                         <div class="iq-watching-block">
                             <div class="block-images position-relative">
                                 <div class="iq-image-box overly-images">
-                                    <a href="./movie-detail.html" class="d-block">
+                                    <a href="{% if i.movie_id.movie_duration %}{% url 'single_movie' i.movie_id.id %}{% else %}{% url 'TVshow_details' i.epi_id.season.show.id %}{% endif %}" class="d-block">
                                         <img src="/static/media/{% if i.movie_id.movie_duration %}{{i.movie_id.movie_thumbnail}}{% else %}{{i.epi_id.season.show.TVShow_thumbnail}}{% endif %}"
                                          alt="movie-card"
                                             class="img-fluid object-cover w-100 d-block border-0">
@@ -562,7 +562,7 @@
     </div>
 </section>
 {% endfor %}
-<section class="tranding-tab-slider section-padding">
+<!-- <section class="tranding-tab-slider section-padding">
     <div class="container-fluid">
         <div class="row m-0 p-0">
             <div id="iq-trending" class="s-margin iq-tvshow-tabs iq-trending-tabs overflow-hidden">
@@ -864,7 +864,7 @@
             </div>
         </div>
     </div>
-</section>
+</section> -->
 
 <div class="recommended-block">
     <div class="container-fluid">

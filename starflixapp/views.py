@@ -1,6 +1,6 @@
 from itertools import chain
 from django.shortcuts import get_object_or_404, redirect, render
-
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 from django.contrib.auth import authenticate,login,logout
 from .models import *
@@ -14,6 +14,7 @@ def index(request):
     latest_tvshow=TVShow.objects.order_by('-id')[:5]
     trending_movies=Movies.objects.order_by('trendingORpriority')[:10]
     trending_tvshow=Episode.objects.all()
+    
     All_movies=Movies.objects.all()
     trending_movie=Movies.objects.order_by('trendingORpriority')[:1]
     popular_content = sorted(
@@ -22,22 +23,23 @@ def index(request):
         reverse=True
     )[:10]
     
-    moviess=LastplayedMovie.objects.all()
-    showss=LastplayedTV.objects.all()
-    lastplayed = sorted(
-        chain(moviess, showss),
-        key=lambda instance: instance.watched_at,
-        reverse=True
-    )
+    
 
 
     name=""
-    
+    lastplayed=""
     if "userID" in request.session:
         u_id=request.session["userID"]
         user1=user_reg.objects.get(user__id=u_id)
         
         name=user1
+        moviess=LastplayedMovie.objects.filter(user_id=user1)
+        showss=LastplayedTV.objects.filter(user_id=user1)
+        lastplayed = sorted(
+        chain(moviess, showss),
+        key=lambda instance: instance.watched_at,
+        reverse=True
+    )
         
     context={
         'movie':movie,
@@ -123,12 +125,14 @@ def TVshow_details(request,id):
     
     return render(request,'TVshow_details.html',context)
 
+@login_required(login_url='login')
 def single_tvshow(request,id):
     u_id=request.session["userID"]
     user=user_reg.objects.get(user__id=u_id) 
     episodes=Episode.objects.get(id=id)
     season_id=episodes.season.id
     existing_entry = LastplayedTV.objects.filter(epi_id=episodes, user_id=user)
+    
     if existing_entry:
 
         existing_entry.delete()
@@ -231,6 +235,7 @@ def pricingpage(request):
 
     return render(request,'pricingpage.html')
 
+@login_required(login_url='login')
 def profile(request):
     u_id=request.session["userID"]
     user=user_reg.objects.get(user__id=u_id)
@@ -398,6 +403,7 @@ def All_movies(request):
 
     return render(request,'All_movies.html',context)
 
+@login_required(login_url='login')
 def single_movie(request,id):
     u_id=request.session["userID"]
     user=user_reg.objects.get(user__id=u_id)
