@@ -131,6 +131,13 @@ def single_tvshow(request,id):
     user=user_reg.objects.get(user__id=u_id) 
     episodes=Episode.objects.get(id=id)
     season_id=episodes.season.id
+
+    reviews=TVReview.objects.filter(episode_id=episodes)
+    total_reviews = TVReview.objects.filter(episode_id=episodes).count()
+    total_rating = sum(review.rating for review in reviews)
+    average = total_rating / len(reviews) if reviews else 0
+    average_rating = round(average, 1)
+
     existing_entry = LastplayedTV.objects.filter(epi_id=episodes, user_id=user)
     
     if existing_entry:
@@ -165,10 +172,28 @@ def single_tvshow(request,id):
                                         user_id=user
                                         )
         obj.save()
+
+    if 'review' in request.POST:
+        
+        content = request.POST['content']
+        rating = request.POST['rating'] 
+        episodes=Episode.objects.get(id=id)
+       
+        review = TVReview.objects.create(episode_id=episodes, content=content, rating=rating, user=user)
+        review.save()
+
+        
+
+
+
+
     context={
         'episode':episodes,
         'user':user,
-        'related_show':related_epi
+        'related_show':related_epi,
+        'userDetails':user,
+        'total_reviews':total_reviews,
+        'average_rating':average_rating,
     }
     return render(request,'single_tvshow.html',context)
 
@@ -413,8 +438,14 @@ def single_movie(request,id):
     genre=movie.movie_genres
     related_movie=Movies.objects.filter(movie_genres=genre)
     
+    reviews=Review.objects.filter(movie_id=movie)
+    total_reviews = Review.objects.filter(movie_id=movie).count()
+    total_rating = sum(review.rating for review in reviews)
+    average = total_rating / len(reviews) if reviews else 0
+    average_rating = round(average, 1)
 
     existing_entry = LastplayedMovie.objects.filter(movie_id=movie, user_id=user)
+
     if existing_entry:
 
         existing_entry.delete()
@@ -449,12 +480,33 @@ def single_movie(request,id):
                                         user_id=user
                                         )
         obj.save()
+
+    if 'review' in request.POST:
         
+        content = request.POST['content']
+        rating = request.POST['rating'] 
+        movie = Movies.objects.get(id=id)
+       
+        review = Review.objects.create(movie_id=movie, content=content, rating=rating, user=user)
+        review.save()
+
+        context={
+        'movie':movie,
+        'related_movie':related_movie,
+        'user':sub,
+        'userDetails':user,
+        'total_reviews':total_reviews,
+        'average_rating':average_rating,
+        }
+        return render(request,'single_movie.html',context)
 
     context={
         'movie':movie,
         'related_movie':related_movie,
-        'user':sub
+        'user':sub,
+        'userDetails':user,
+        'total_reviews':total_reviews,
+        'average_rating':average_rating,
     }
 
     return render(request,'single_movie.html',context)

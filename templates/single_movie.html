@@ -10,15 +10,17 @@
 
         <div class="row">
             <div class="alert alert-warning d-flex align-items-center justify-content-center" role="alert">
-                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:">
+                    <use xlink:href="#exclamation-triangle-fill" />
+                </svg>
                 <div>
-                  You can't watch this movie, because you are not a paid user
+                    You can't watch this movie, because you are not a paid user
                 </div>
             </div>
             <div class="col-lg-12">
                 <div class="pt-0">
-                    <video poster="/static/media/{{movie.movie_thumbnail}}"
-                        class="video-js vjs-big-play-centered w-100" controls preload="auto">
+                    <video poster="/static/media/{{movie.movie_thumbnail}}" class="video-js vjs-big-play-centered w-100"
+                        controls preload="auto">
                         <!-- <source src="/static/media/{{movie.movie_file}}" type="video/mp4" />
                         <source src="/static/media/{{movie.movie_file}}" type="video/webm" /> -->
                     </video>
@@ -39,7 +41,7 @@
                 </div>
             </div>
         </div>
-        
+
         {% endif %}
 
     </div>
@@ -60,26 +62,29 @@
                                     style="opacity: 1; animation-delay: 0.6s">
                                     {{movie.title}}
                                 </h3>
-                                
+
                             </div>
                             <div class="slider-ratting d-flex align-items-center ms-lg-3 ms-0 mt-3 mb-3">
                                 <ul
                                     class="ratting-start p-0 m-0 list-inline text-warning d-flex align-items-center justify-content-left">
                                     <li><i class="fa fa-star text-primary" aria-hidden="true"></i></li>
-                                    
+
                                 </ul>
-                                <span class="text-white ms-2">{{movie.imdb_rating}} <img src="{% static 'images/imdb-logo.svg' %}" alt="imdb logo"
-                                    class="img-fluid"></span>
+                                <span class="text-white ms-2">{{movie.imdb_rating}} <img
+                                        src="{% static 'images/imdb-logo.svg' %}" alt="imdb logo"
+                                        class="img-fluid"></span>
                             </div>
-                            
+
                             <div class="d-flex flex-wrap align-items-center text-white text-detail flex-wrap mb-4">
                                 <span class="badge bg-secondary">{{movie.movie_genres.genre}}</span>
                                 <span class="ms-3 font-Weight-500 genres-info">{{movie.movie_duration}}</span>
-                                <span class="font-size-6"> &nbsp;&nbsp;&nbsp; <a href=""> <i class="fa-solid fa-circle"></i> </a> &nbsp;&nbsp;&nbsp;</span>
+                                <span class="font-size-6"> &nbsp;&nbsp;&nbsp; <a href=""> <i
+                                            class="fa-solid fa-circle"></i> </a> &nbsp;&nbsp;&nbsp;</span>
                                 <span class="trending-year trending-year-list font-Weight-500 genres-info">
                                     {{movie.movie_mon_yr}}
                                 </span>
-                                <span class="font-size-6"> &nbsp;&nbsp;&nbsp; <a href=""> <i class="fa-solid fa-circle"></i> </a> &nbsp;&nbsp;&nbsp;</span>
+                                <span class="font-size-6"> &nbsp;&nbsp;&nbsp; <a href=""> <i
+                                            class="fa-solid fa-circle"></i> </a> &nbsp;&nbsp;&nbsp;</span>
                                 <span class="trending-year trending-year-list font-Weight-500 genres-info">
                                     {{movie.language}}
                                 </span>
@@ -88,27 +93,34 @@
                                 <ul class="list-inline p-0 share-icons music-play-lists mb-n2 mx-n2">
                                     <form action="" method="post">
                                         {% csrf_token %}
-                                        <li><span><button name="fav" type="submit" class="border-0 bg-transparent text-success"><i class="fa-solid fa-heart "></button></i></span></li>
+                                        <li><span><button name="fav" type="submit"
+                                                    class="border-0 bg-transparent text-success"><i
+                                                        class="fa-solid fa-heart "></button></i></span></li>
 
-                                        <li><span><button name="watchlist" type="submit" class="border-0 bg-transparent text-success"><i class="fa-solid fa-plus"></i></button></span></li>
+                                        <li><span><button name="watchlist" type="submit"
+                                                    class="border-0 bg-transparent text-success"><i
+                                                        class="fa-solid fa-plus"></i></button></span></li>
 
-                                        <li><span><button name="download" type="submit" class="border-0 bg-transparent text-success"><i class="fa-solid fa-download"></i></button></span></li>
+                                        <li><span><button name="download" type="submit"
+                                                    class="border-0 bg-transparent text-success"><i
+                                                        class="fa-solid fa-download"></i></button></span></li>
                                     </form>
                                 </ul>
-                                
+
                             </div>
                             <ul class="iq-blogtag list-unstyled d-flex flex-wrap align-items-center gap-3 p-0">
                                 <li class="iq-tag-title text-primary mb-0">
                                     <i class="fa fa-tags" aria-hidden="true"></i> Tags:
                                 </li>
                                 {% for i in movie.Tags.all %}
-                                <li>{{i.tag}}</li>{% if not forloop.last %}<span class="font-size-6"><a href=""><i class="fa-solid fa-circle"></i></a></span> {% endif %}
+                                <li>{{i.tag}}</li>{% if not forloop.last %}<span class="font-size-6"><a href=""><i
+                                            class="fa-solid fa-circle"></i></a></span> {% endif %}
                                 {% endfor %}
                             </ul>
                         </div>
                         <div class="trailor-video col-md-3 col-12 mt-lg-0 mt-4 mb-md-0 mb-1 text-lg-right">
-                            <a href="/static/media/{{movie.movie_trailer}}" class="video-open playbtn text-decoration-none"
-                                tabindex="0">
+                            <a href="/static/media/{{movie.movie_trailer}}"
+                                class="video-open playbtn text-decoration-none" tabindex="0">
                                 <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
                                     xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="80px"
                                     height="80px" viewBox="0 0 213.7 213.7" enable-background="new 0 0 213.7 213.7"
@@ -164,74 +176,95 @@
                         <div id="review-01" class="tab-pane animated fadeInUp" role="tabpanel">
                             <div class="streamit-reviews">
                                 <div id="comments" class="comments-area validate-form">
+                                    {% if total_reviews %}
+                                    <p class="masvideos-noreviews mt-3">
+                                        {{total_reviews}} Reviews - <i class="fa fa-star text-primary" aria-hidden="true"></i> {{average_rating}}
+                                    </p>
+                                    {% else %}
                                     <p class="masvideos-noreviews mt-3">
                                         There are no reviews yet.
                                     </p>
+                                    {% endif %}
                                 </div>
                                 <div class="review_form">
                                     <div class="comment-respond">
                                         <h4 class="fw-500 my-2">
-                                            Be the first to review “{{movie.title}}”
+                                            Give A Review For “{{movie.title}}”
                                         </h4>
+                                        <form action="" enctype="multipart/form-data" method="post">
+                                            {% csrf_token %}
                                         <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="mb-2">
-                                                        Your review
-                                                        <span class="required">
-                                                            *
-                                                        </span>
-                                                    </label>
-                                                    <textarea class="form-control" name="comment" cols="5" rows="8"
-                                                        required=""></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="mb-2">
-                                                        Name
-                                                        <span class="required">
-                                                            *
-                                                        </span>
-                                                    </label>
-                                                    <input class="form-control" name="author" type="text" value=""
-                                                        size="30" required="" />
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="mb-2">
-                                                        Email&nbsp;
-                                                        <span class="required">
-                                                            *
-                                                        </span>
-                                                    </label>
-                                                    <input class="form-control" name="email" type="email" value=""
-                                                        size="30" required="" />
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <div class="mt-3 mt-3 d-flex gap-2 align-items-center">
-                                                    <input class="form-check-input mt-0" type="checkbox" value=""
-                                                        id="check1" checked />
-                                                    <label class="form-check-label" for="check1">
-                                                        Save my name, email, and website in this browser for the
-                                                        next time I comment.
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <div class="form-submit mt-4">
-                                                    <div class="iq-button">
-                                                        <button name="submit" type="submit" id="submit"
-                                                            class="btn text-uppercase position-relative" value="Submit">
-                                                            <span class="button-text">Submit</span>
-                                                            <i class="fa-solid fa-play"></i>
-                                                        </button>
+                                            
+
+                                                <div class="col-md-12">
+                                                    
+                                                    <div class="form-group">
+                                                        <label class="mb-2">
+                                                            Your review
+                                                            <span class="required">
+                                                                *
+                                                            </span>
+                                                        </label>
+                                                        <textarea class="form-control" placeholder="Write Your Review Here" name="content" cols="5" rows="8"
+                                                            required=""></textarea>
                                                     </div>
                                                 </div>
-                                            </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label class="mb-2 ">
+                                                            Name :
+                                                            
+                                                        </label>
+                                                        <input class="form-control text-capitalize" name="author" readonly type="text"
+                                                            value="{{userDetails.user_full_name}}" size="30"  />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label class="mb-2">
+                                                            Rate out of 5
+                                                            <span class="required">
+                                                                *
+                                                            </span>
+
+                                                        </label>
+                                                        <select class="form-control" id="rating" name="rating">
+
+                                                            <option value="1">1</option>
+                                                            <option value="2">2</option>
+                                                            <option value="3">3</option>
+                                                            <option value="4">4</option>
+                                                            <option value="5">5</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="mb-2">
+                                                            Email :
+                                                            
+                                                        </label>
+                                                        <input class="form-control" name="email" type="email" readonly value="{{userDetails.user_email}}"
+                                                            size="30" />
+                                                    </div>
+                                                </div>
+
+                                                
+                                                <div class="col-md-12">
+                                                    <div class="form-submit mt-4">
+                                                        <div class="iq-button">
+                                                            <button name="review" type="submit" id="submit"
+                                                                class="btn text-uppercase position-relative"
+                                                                value="Submit">
+                                                                <span class="button-text">Submit</span>
+                                                                <i class="fa-solid fa-play"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            
                                         </div>
+                                    </form>
                                     </div>
                                 </div>
                             </div>
@@ -250,14 +283,14 @@
                                             <th>
                                                 Language
                                             </th>
-                                            
+
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
                                             <td>
                                                 <div class="iq-button">
-                                                    <a href="./movie-detail.html"
+                                                    <a href="{% url 'single_movie' movie.id %}"
                                                         class="btn text-uppercase position-relative">
                                                         <span class="button-text"> Play Now</span>
                                                         <i class="fa-solid fa-play"></i>
@@ -270,12 +303,12 @@
                                             <td>
                                                 english
                                             </td>
-                                            
+
                                         </tr>
                                         <tr>
                                             <td>
                                                 <div class="iq-button">
-                                                    <a href="./movie-detail.html"
+                                                    <a href="{% url 'single_movie' movie.id %}"
                                                         class="btn text-uppercase position-relative">
                                                         <span class="button-text"> Play Now</span>
                                                         <i class="fa-solid fa-play"></i>
@@ -288,12 +321,12 @@
                                             <td>
                                                 english
                                             </td>
-                                            
+
                                         </tr>
                                         <tr>
                                             <td>
                                                 <div class="iq-button">
-                                                    <a href="./movie-detail.html"
+                                                    <a href=".{% url 'single_movie' movie.id %}"
                                                         class="btn text-uppercase position-relative">
                                                         <span class="button-text"> Play Now</span>
                                                         <i class="fa-solid fa-play"></i>
@@ -306,7 +339,7 @@
                                             <td>
                                                 English
                                             </td>
-                                            
+
                                         </tr>
                                     </tbody>
                                 </table>
@@ -341,7 +374,7 @@
                             {% for a in movie.casts.all %}
                             <li class="swiper-slide">
                                 <div class="cast-images m-0 row align-items-center position-relative">
-                                    
+
                                     <div class="col-8 block-description pt-3">
                                         <h6 class="iq-title">
                                             {{a.name}}
@@ -364,7 +397,7 @@
                             {% for a in movie.crew.all %}
                             <li class="swiper-slide">
                                 <div class="cast-images m-0 row align-items-center position-relative">
-                                    
+
                                     <div class="col-8 block-description starring-desc pt-3">
                                         <h6 class="iq-title">
                                             {{a.name}}
@@ -412,28 +445,35 @@
                                                     <a href="{% url 'single_movie' i.id %}">{{i.title}}</a>
                                                 </h6>
                                                 <div class="movie-time d-flex align-items-center my-2">
-                                                    <span class="movie-time-text font-normal">{{i.movie_duration}}</span>
+                                                    <span
+                                                        class="movie-time-text font-normal">{{i.movie_duration}}</span>
                                                 </div>
                                             </div>
-                                            
+
                                         </div>
                                     </div>
                                     <div class="block-social-info align-items-center">
                                         <ul class="p-0 m-0 d-flex gap-2 music-play-lists">
-                                            <li class="share position-relative d-flex align-items-center text-center mb-0">
-                                                <span class="w-100 h-100 d-inline-block bg-transparent"> <a href="{% url 'addToWatchlist' i.id %}">
-                                                    <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark" viewBox="0 0 16 16">
-                                                        <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1z"/>
-                                                    </svg></a>
+                                            <li
+                                                class="share position-relative d-flex align-items-center text-center mb-0">
+                                                <span class="w-100 h-100 d-inline-block bg-transparent"> <a
+                                                        href="{% url 'addToWatchlist' i.id %}">
+                                                        <svg class="mt-1" xmlns="http://www.w3.org/2000/svg" width="16"
+                                                            height="16" fill="currentColor" class="bi bi-bookmark"
+                                                            viewBox="0 0 16 16">
+                                                            <path
+                                                                d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1z" />
+                                                        </svg></a>
                                                 </span>
-                                                
+
                                             </li>
                                             <li
                                                 class="share position-relative d-flex align-items-center text-center mb-0">
-                                                <span class="w-100 h-100 d-inline-block bg-transparent"> <a href="{% url 'addToFavourite' i.id %}">
-                                                    <i class="fa-regular fa-heart"></i></a>
+                                                <span class="w-100 h-100 d-inline-block bg-transparent"> <a
+                                                        href="{% url 'addToFavourite' i.id %}">
+                                                        <i class="fa-regular fa-heart"></i></a>
                                                 </span>
-                                                
+
                                             </li>
                                         </ul>
                                         <div class="iq-button">

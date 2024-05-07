@@ -143,3 +143,22 @@ class LastplayedTV(models.Model):
     user_id=models.ForeignKey(user_reg,on_delete=models.CASCADE)
     epi_id=models.ForeignKey(Episode,on_delete=models.CASCADE,null=True)
     watched_at = models.DateTimeField(auto_now_add=True,null=True)
+
+class Review(models.Model):
+    movie_id = models.ForeignKey(Movies, on_delete=models.CASCADE)
+    content = models.TextField()
+    rating = models.IntegerField()
+    user = models.ForeignKey(user_reg, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.user_full_name}'s review for {self.movie_id.title}"
+class TVReview(models.Model):
+    episode_id = models.ForeignKey(Episode, on_delete=models.CASCADE)
+    content = models.TextField()
+    rating = models.IntegerField()
+    user = models.ForeignKey(user_reg, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.user_full_name}'s review for {self.episode_id.season.show.title}"
