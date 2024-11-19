@@ -3,6 +3,7 @@ from .models import *
 
 # Register your models here.
 admin.site.register(Movies) 
+admin.site.register(user_reg) 
 admin.site.register(Cast) 
 admin.site.register(Crew)
 admin.site.register(Tags)

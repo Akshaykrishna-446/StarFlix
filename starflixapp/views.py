@@ -1,8 +1,11 @@
 from itertools import chain
+import os
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 from django.contrib.auth import authenticate,login,logout
+from django.core.paginator import Paginator
 from .models import *
 # Create your views here.
 def index(request):
@@ -189,7 +192,7 @@ def single_tvshow(request,id):
 
     context={
         'episode':episodes,
-        'user':user,
+        
         'related_show':related_epi,
         'userDetails':user,
         'total_reviews':total_reviews,
@@ -198,13 +201,39 @@ def single_tvshow(request,id):
     return render(request,'single_tvshow.html',context)
 
 def allTvshows(request):
-
+    page=1
+    if request.GET:
+        page=request.GET.get('page',1)
     tvshow=TVShow.objects.all()
+    product_paginator=Paginator(tvshow,4)
+    tvshow=product_paginator.get_page(page)
+
     context={
         'tvshow':tvshow
     }
 
     return render(request,'allTvshows.html',context)
+
+def download_movie(request, movie_id):
+    movie = get_object_or_404(Movies, pk=movie_id)
+    file_path = movie.movie_file.path
+    if os.path.exists(file_path):
+        with open(file_path, 'rb') as movie_file:
+            response = HttpResponse(movie_file.read(), content_type='application/force-download')
+            response['Content-Disposition'] = 'attachment; filename=' + os.path.basename(file_path)
+            return response
+    return redirect('index')
+
+def download_tvshow(request, tvshow_id):
+    tvshow = get_object_or_404(Episode, pk=tvshow_id)
+    file_path = tvshow.TVshow_file.path
+    if os.path.exists(file_path):
+        with open(file_path, 'rb') as tvshow_file:
+            response = HttpResponse(tvshow_file.read(), content_type='application/force-download')
+            response['Content-Disposition'] = 'attachment; filename=' + os.path.basename(file_path)
+            return response
+    return redirect('index')
+
 def searchresult(request):
     
     if 'search' in request.POST:
@@ -229,32 +258,35 @@ def pricingpage(request):
     if request.POST and 'free' in request.POST:
 
         subc="free"
-
-        u_id=request.session["userID"]
-        user=user_reg.objects.get(user__id=u_id)
-        if user:
-            user.subscription=subc
-            user.save()
+        if "userID" in request.session:
+            u_id=request.session["userID"]
+            user=user_reg.objects.get(user__id=u_id)
+            if user:
+                user.subscription=subc
+                user.save()
+                return redirect('index')
 
     if request.POST and 'premium' in request.POST:
 
         subc="premium"
-
-        u_id=request.session["userID"]
-        user=user_reg.objects.get(user__id=u_id)
-        if user:
-            user.subscription=subc
-            user.save()
+        if "userID" in request.session:
+            u_id=request.session["userID"]
+            user=user_reg.objects.get(user__id=u_id)
+            if user:
+                user.subscription=subc
+                user.save()
+            return redirect('index')
 
     if request.POST and 'basic' in request.POST:
 
         subc="basic"
-
-        u_id=request.session["userID"]
-        user=user_reg.objects.get(user__id=u_id)
-        if user:
-            user.subscription=subc
-            user.save()
+        if "userID" in request.session:
+            u_id=request.session["userID"]
+            user=user_reg.objects.get(user__id=u_id)
+            if user:
+                user.subscription=subc
+                user.save()
+            return redirect('index')
 
 
 
@@ -294,7 +326,7 @@ def profile(request):
     context={
         'watchlist':bwatchlist,
         'favourite':bfavourite,
-        'user':user,
+        'userdetails':user,
     }
 
     return render(request,'profile.html',context)
@@ -400,7 +432,7 @@ def loginUser(request):
                                     user_cpassword=confirm_password
                                     )
         obj.save()
-        return redirect('pricingpage')
+        return redirect('login')
     
     if request.POST and 'userlogin' in request.POST:
         username=request.POST["username"]
@@ -409,7 +441,15 @@ def loginUser(request):
         if user:
             login(request,user)
             request.session["userID"]=user.id
-            return redirect('index')
+            u_id=request.session["userID"]
+            user=user_reg.objects.get(user__id=u_id)
+            paid=user.subscription
+            if paid == "premium":
+                 return redirect('index')
+            elif paid == "basic":
+                return redirect('index') 
+            else:
+                return redirect('pricingpage')
        
 
 
@@ -421,7 +461,13 @@ def sign_out(request):
     return redirect('index')
 
 def All_movies(request):
+    page=1
+    if request.GET:
+        page=request.GET.get('page',1)
     movie=Movies.objects.all()
+    product_paginator=Paginator(movie,4)
+    movie=product_paginator.get_page(page)
+    
     context={
         'movie':movie
     }
@@ -451,7 +497,7 @@ def single_movie(request,id):
         existing_entry.delete()
 
     
-  
+    
     obj=LastplayedMovie.objects.create(movie_id=movie,
                                 user_id=user,
                                 
@@ -491,19 +537,19 @@ def single_movie(request,id):
         review.save()
 
         context={
-        'movie':movie,
-        'related_movie':related_movie,
-        'user':sub,
-        'userDetails':user,
-        'total_reviews':total_reviews,
-        'average_rating':average_rating,
+            'movie':movie,
+            'related_movie':related_movie,
+            'usersub':sub,
+            'userDetails':user,
+            'total_reviews':total_reviews,
+            'average_rating':average_rating,
         }
         return render(request,'single_movie.html',context)
 
     context={
         'movie':movie,
         'related_movie':related_movie,
-        'user':sub,
+        
         'userDetails':user,
         'total_reviews':total_reviews,
         'average_rating':average_rating,
@@ -511,35 +557,7 @@ def single_movie(request,id):
 
     return render(request,'single_movie.html',context)
 
-""" def watch_movie(request, id):
-
-    u_id=request.session["userID"]
-    user=user_reg.objects.get(user__id=u_id)
-    movie = Movies.objects.get(id=id)
-    print('444444444444444444444444444444444444444444444')
-
-    print(id)
-
-    minutes_watched = int(request.POST.get('minutes_watched'))
-    print('3333333333333333333333333333333333333333')
-
-    print(minutes_watched)
-    existing_entry = LastplayedMovie.objects.filter(movie_id=movie, user_id=user)
-    if existing_entry:
-
-        existing_entry.delete()
-
-    if minutes_watched > 0:
-  
-        obj=LastplayedMovie.objects.create(movie_id=movie,
-                                    user_id=user,
-                                    minutes_watched=minutes_watched,
-                                    )
-        obj.save()
-
-    return redirect('single_movie')
- """
-
+@login_required(login_url='login')
 def addToWatchlist(request,id):
 
     u_id=request.session["userID"]
@@ -569,6 +587,7 @@ def removeWatchlistTV(request,id):
     remove.delete() 
     return redirect('profile')
 
+@login_required(login_url='login')
 def addToFavourite(request,id):
 
     u_id=request.session["userID"]

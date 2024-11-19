@@ -21,7 +21,8 @@ class user_reg(models.Model):
     user_cpassword=models.TextField(null=True)
     subscription=models.CharField(max_length=50,null=True)
     profile_pic = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
-
+    def _str_(self):
+        return self.user_full_name
 
 class Cast(models.Model):
     name = models.CharField(max_length=100)
@@ -121,11 +122,15 @@ class Episode(models.Model):
 class Favourite(models.Model):
     user_id=models.ForeignKey(user_reg,on_delete=models.CASCADE)
     movie_id=models.ForeignKey(Movies,on_delete=models.CASCADE,default=None)
-
+    def __str__(self):
+        return f"{self.user_id.user_full_name} -  FavouriteMovie - {self.movie_id.title}"
+    
 class Watchlist(models.Model):
     user_id=models.ForeignKey(user_reg,on_delete=models.CASCADE)
     movie_id=models.ForeignKey(Movies,on_delete=models.CASCADE,default=None)
-
+    def __str__(self):
+        return f"{self.user_id.user_full_name} -  FavouriteMovie - {self.movie_id.title}"
+    
 class FavouriteTV(models.Model):
     user_id=models.ForeignKey(user_reg,on_delete=models.CASCADE)
     tvs_id=models.ForeignKey(Episode,on_delete=models.CASCADE,default=None) 
@@ -153,6 +158,7 @@ class Review(models.Model):
 
     def __str__(self):
         return f"{self.user.user_full_name}'s review for {self.movie_id.title}"
+    
 class TVReview(models.Model):
     episode_id = models.ForeignKey(Episode, on_delete=models.CASCADE)
     content = models.TextField()

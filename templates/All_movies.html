@@ -79,6 +79,41 @@
 
                 </div>
                 {% endfor %}
+                
+            </div>
+
+            <div class="mt-5">
+                <nav aria-label="Page navigation example" style="border: none;">
+                    <ul class="pagination justify-content-center" style="border: none;">
+
+                        <li class="page-item " style="border: 1px solid green;">
+                            {% if movie.has_previous %}
+                            <a class="page-link text-primary" href="?page={{ movie.previous_page_number }}"
+                                aria-label="Next">
+                                <span style="border: none;">&laquo;</span>
+                            </a>
+                            {% endif %}
+
+                        </li>
+
+                        {% for i in movie.paginator.page_range %}
+                        <a class="page-link text-primary" href="?page={{i}}" style="border: none;">
+                            <span style="border: none;">{{i}}</span>
+                        </a>
+
+                        {% endfor %}
+
+                        <li class="page-item " style="border: 1px solid green;">
+                            {% if movie.has_next %}
+                            <a class="page-link text-primary" href="?page={{ movie.next_page_number }}"
+                                aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                            {% endif %}
+
+                        </li>
+                    </ul>
+                </nav>
             </div>
         </div>
     </div>

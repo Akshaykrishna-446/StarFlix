@@ -33,20 +33,9 @@
                                     <ul
                                         class="ratting-start p-0 m-0 list-inline text-warning d-flex align-items-center justify-content-left">
                                         <li>
-                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                            <i class="fa fa-star text-primary" aria-hidden="true"></i>
                                         </li>
-                                        <li>
-                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                        </li>
-                                        <li>
-                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                        </li>
-                                        <li>
-                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                        </li>
-                                        <li>
-                                            <i class="fa fa-star-half" aria-hidden="true"></i>
-                                        </li>
+                                        
                                     </ul>
                                     <span class="text-white ms-2 font-size-14 fw-500">{{i.imdb_rating}}/10</span>
                                     <span class="ms-2">
@@ -76,7 +65,7 @@
                             </div>
                             <div class="RightAnimate-four">
                                 <div class="iq-button">
-                                    <a href="movie-detail.html" class="btn text-uppercase position-relative">
+                                    <a href="{% url 'single_movie' i.id %}" class="btn text-uppercase position-relative">
                                         <span class="button-text">play now</span>
                                         <i class="fa-solid fa-play"></i>
                                     </a>
@@ -140,6 +129,12 @@
             <div class="position-relative swiper swiper-card" data-slide="4" data-laptop="4" data-tab="3"
                 data-mobile="2" data-mobile-sm="2" data-autoplay="false" data-loop="false" data-navigation="true"
                 data-pagination="true">
+                {% if not user.is_authenticated %}
+                <ul class="p-0 swiper-wrapper m-0  list-inline">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SignUp First
+                </ul>
+                {% else %}
+
                 <ul class="p-0 swiper-wrapper m-0  list-inline">
                     <!-- continue watching slide, loop here -->
                     {% for i in lastplayed %}
@@ -147,7 +142,7 @@
                         <div class="iq-watching-block">
                             <div class="block-images position-relative">
                                 <div class="iq-image-box overly-images">
-                                    <a href="{% if i.movie_id.movie_duration %}{% url 'single_movie' i.movie_id.id %}{% else %}{% url 'TVshow_details' i.epi_id.season.show.id %}{% endif %}" class="d-block">
+                                    <a href="{% if i.movie_id.movie_duration %}{% url 'single_movie' i.movie_id.id %}{% else %}{% url 'single_tvshow' i.epi_id.id %}{% endif %}" class="d-block">
                                         <img src="/static/media/{% if i.movie_id.movie_duration %}{{i.movie_id.movie_thumbnail}}{% else %}{{i.epi_id.season.show.TVShow_thumbnail}}{% endif %}"
                                          alt="movie-card"
                                             class="img-fluid object-cover w-100 d-block border-0">
@@ -174,6 +169,8 @@
                     {% endfor %}
                     <!-- end -->
                 </ul>
+
+                {% endif %}
                 <div class="swiper-button swiper-button-next"></div>
                 <div class="swiper-button swiper-button-prev"></div>
             </div>

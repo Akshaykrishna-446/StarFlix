@@ -6,7 +6,7 @@
 <div class="iq-main-slider site-video">
     <div class="container-fluid">
 
-        {% if user == "free" %}
+        {% if userDetails.subscription == free %}
 
         <div class="row">
             <div class="alert alert-warning d-flex align-items-center justify-content-center" role="alert">
@@ -33,7 +33,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="pt-0">
-                    <video id="my-video" autoplay poster="/static/media/{{movie.movie_thumbnail}}"
+                    <video id="my-video" preload="metadata" autoplay poster="/static/media/{{movie.movie_thumbnail}}"
                         class="video-js vjs-big-play-centered w-100" controls preload="auto">
                         <source src="/static/media/{{movie.movie_file}}" type="video/mp4" />
                         <source src="/static/media/{{movie.movie_file}}" type="video/webm" />
@@ -101,9 +101,8 @@
                                                     class="border-0 bg-transparent text-success"><i
                                                         class="fa-solid fa-plus"></i></button></span></li>
 
-                                        <li><span><button name="download" type="submit"
-                                                    class="border-0 bg-transparent text-success"><i
-                                                        class="fa-solid fa-download"></i></button></span></li>
+                                        <li><span><a href="{% url 'download_movie' movie.id %}" class="border-0 bg-transparent text-success">
+                                                    <i class="fa-solid fa-download"></i></a></span></li>
                                     </form>
                                 </ul>
 

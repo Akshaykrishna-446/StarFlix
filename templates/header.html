@@ -185,6 +185,7 @@
                             {% endif %}
                             
                             {% if user.is_authenticated %}
+                            {% with user.user_reg as user_info %}
                             <li class="nav-item dropdown" id="itemdropdown1">
                                 <a class="nav-link d-flex align-items-center" href="#" id="navbarDropdown"
                                     role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -213,7 +214,7 @@
                                 <ul class="dropdown-menu dropdown-menu-end dropdown-user border-0 p-0 m-0"
                                     aria-labelledby="navbarDropdown">
                                     <li class="user-info d-flex align-items-center gap-3 mb-3">
-                                        {% if not name.profile_pic %}
+                                        {% if not user_info.profile_pic %}
 
                                             
                                             <img src="/static/images/person.jpeg"
@@ -222,13 +223,13 @@
 
                                         {% else %}
                                         
-                                           <img src="{{ name.profile_pic.url }}"
+                                           <img src="{{ user_info.profile_pic.url }}"
                                             class="img-fluid object-cover rounded-3" alt="profile">
                                         
                                         {% endif %}
                                         
                                         <span
-                                            class="font-size-14 fw-500 text-capitalize text-white">{{name.user_full_name}} </span>
+                                            class="font-size-14 fw-500 text-capitalize text-white">{{user_info.user_full_name}} </span>
                                     </li>
                                     <li>
                                         <a href="{% url 'profile' %}"
@@ -288,6 +289,7 @@
                                     </li>
                                 </ul>
                             </li>
+                            {% endwith %}
                             {% endif %}
                         </ul>
                     </div>

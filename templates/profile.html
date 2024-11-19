@@ -50,18 +50,18 @@
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
                 <div class="d-flex align-items-center gap-3">
                     <div class="account-logo d-flex align-items-center position-relative">
-                        {% if not user.profile_pic %}
+                        {% if not userdetails.profile_pic %}
                         <img src="/static/images/person.jpeg"
                             class="img-fluid object-cover rounded-3" alt="profile">
                         {% else %}
                         
-                        <img src="{% if user.socialaccount_set.all.0.get_avatar_url %}{{ user.socialaccount_set.all.0.get_avatar_url }}{% else %}{{ user.profile_pic.url }}{%endif%} "
+                        <img src="{% if userdetails.socialaccount_set.all.0.get_avatar_url %}{{ userdetails.socialaccount_set.all.0.get_avatar_url }}{% else %}{{ userdetails.profile_pic.url }}{%endif%} "
                             class="img-fluid object-cover rounded-3" onclick="openModal()" alt="profile">
                         <div id="myModal" class="modal">
                             <!-- Modal content -->
                             <div class="modal-content">
                                 <span class="close" onclick="closeModal()">&times;</span>
-                                <img src="{% if user.socialaccount_set.all.0.get_avatar_url %}{{ user.socialaccount_set.all.0.get_avatar_url }}{% else %}{{ user.profile_pic.url }}{%endif%} "  style="width: 100%; height: auto;" alt="Profile Photo">
+                                <img src="{% if userdetails.socialaccount_set.all.0.get_avatar_url %}{{ userdetails.socialaccount_set.all.0.get_avatar_url }}{% else %}{{ userdetails.profile_pic.url }}{%endif%} "  style="width: 100%; height: auto;" alt="Profile Photo">
                             </div>
                         </div>
                         {% endif %}
@@ -70,13 +70,13 @@
                     </div>
                     
                     <div>
-                        <h6 class="font-size-18 text-capitalize text-white fw-500">{{user.first_name}} {{user.user_full_name}} </h6>
-                        <span class="font-size-14 text-white fw-500">{{user.email}} {{user.user_email}} </span>
+                        <h6 class="font-size-18 text-capitalize text-white fw-500">{{userdetails.first_name}} {{userdetails.user_full_name}} </h6>
+                        <span class="font-size-14 text-white fw-500">{{userdetails.email}} {{userdetails.user_email}} </span>
                     </div>
                 </div>
                 <div class="iq-button">
                     <div class="me-5  position-relative" style="width: 100px;">
-                        <span class="">Current Plan : </span><h4 class="text-uppercase mt-1 text-primary">{{user.subscription}}</h4>
+                        <span class="">Current Plan : </span><h4 class="text-uppercase mt-1 text-primary">{{userdetails.subscription}}</h4>
                        
                     </div>
                 </div>

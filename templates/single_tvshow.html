@@ -5,7 +5,7 @@
 <!-- Banner Start -->
 <div class="iq-main-slider site-video">
     <div class="container-fluid">
-        {% if user.subscription == free %}
+        {% if userDetails.subscription == free %}
         <div class="row">
             <div class="alert alert-warning d-flex align-items-center justify-content-center" role="alert">
                 <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:">
@@ -97,9 +97,8 @@
                                                     class="border-0 bg-transparent text-primary"><i
                                                         class="fa-solid fa-plus"></i></button></span></li>
 
-                                        <li><span><button name="download" type="submit"
-                                                    class="border-0 bg-transparent text-primary"><i
-                                                        class="fa-solid fa-download"></i></button></span></li>
+                                        <li><span><a href="{% url 'download_tvshow' episode.id %}" class="border-0 bg-transparent text-success">
+                                            <i class="fa-solid fa-download"></i></a></span></li>
                                     </form>
                                 </ul>
 

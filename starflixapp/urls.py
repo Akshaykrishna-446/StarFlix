@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    
     path('', views.index, name='index'),
     path('moviesHome', views.moviesHome, name='moviesHome'),
     path('TVshows', views.TVshows, name='TVshows'),
@@ -27,5 +28,7 @@ urlpatterns = [
     path('tagsredirect/<tag>', views.tagsredirect, name='tagsredirect'),
     path('category', views.category, name='category'),
     path('searchresult', views.searchresult, name='searchresult'),
+    path('downloadmovie/<int:movie_id>', views.download_movie, name='download_movie'),
+    path('downloadtvshow/<int:tvshow_id>', views.download_tvshow, name='download_tvshow'),
     
 ]

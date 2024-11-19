@@ -8,8 +8,8 @@
     <div class="container">
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-        <div class="row" style="padding:70px; padding-top: 0px;">
-            
+            <div class="row" style="padding:70px; padding-top: 0px;">
+
                 <div class="col-lg-4 col-md-6 mb-3 mb-lg-0">
                     <div class="pricing-plan-wrapper">
                         <div class="pricing-plan-header">
@@ -38,14 +38,14 @@
                             </div>
                             <div class="pricing-plan-footer">
                                 <div class="iq-button">
-                                <button type="submit" name="free" class="btn text-uppercase position-relative">
-                                <span class="button-text">select free</span>
-                                <i class="fa-solid fa-play"></i>
-                                </button>
+                                    <button type="submit" name="free" class="btn text-uppercase position-relative">
+                                        <span class="button-text">select free</span>
+                                        <i class="fa-solid fa-play"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                    </div>  
+                    </div>
                 </div>
                 <div class="col-lg-4 col-md-6 mb-3 mb-lg-0">
                     <div class="pricing-plan-wrapper">
@@ -129,12 +129,10 @@
                         </div>
                     </div>
                 </div>
-            
-        </div>
-    </form>
+
+            </div>
+        </form>
     </div>
 </div>
 
 {% endblock content %}
-
-
